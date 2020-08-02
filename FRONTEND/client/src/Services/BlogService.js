@@ -1,0 +1,63 @@
+import axios from "axios";
+
+export default {
+  addBlog: (blog) => {
+    return axios
+      .post("/blog/createPost", blog)
+      .then((res) => {
+        if (res.status !== 400) {
+          return res.data;
+        } else {
+          return { message: { msgBody: "Error" }, msgError: true };
+        }
+      })
+      .catch((err) => {
+        return {
+          message: {
+            msgBody: "Thêm không thành công vui lòng nhập đầy đủ thông tin!!!",
+            msgError: true,
+          },
+        };
+      });
+  },
+
+  //getalll
+  getBlog: () => {
+    return axios
+      .get("/blog/getBlog")
+      .then((res) => {
+        if (res.status !== 400) {
+          return res.data;
+        } else {
+          return { message: { msgBody: "Error" }, msgError: true };
+        }
+      })
+      .catch((err) => {
+        return {
+          message: {
+            msgBody: "Lấy dữ liệu không thành công!!!",
+            msgError: true,
+          },
+        };
+      });
+  },
+  getBlogByUser: () => {
+    return axios
+      .get("/blog/user/getBlogs")
+      .then((res) => {
+        if (res.status !== 400) {
+          return res.data;
+        } else {
+          return { message: { msgBody: "Error" }, msgError: true };
+        }
+      })
+      .catch((err) => {
+        return {
+          message: {
+            msgBody: "Lấy dữ liệu không thành công!!!",
+            msgError: true,
+          },
+        };
+      });
+  },
+};

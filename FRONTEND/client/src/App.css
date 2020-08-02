@@ -1,0 +1,109 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.editor {
+  background-color: white;
+}
+
+#toolbar {
+  border: white 2px solid;
+}
+
+.quill {
+  border: white 2px solid;
+}
+.ql-editor p,
+.ql-editor ol,
+.ql-editor ul,
+.ql-editor pre,
+.ql-editor blockquote,
+.ql-editor h1,
+.ql-editor h2,
+.ql-editor h3,
+.ql-editor h4,
+.ql-editor h5,
+.ql-editor h6 {
+  margin: -3px !important;
+  padding: 0;
+  counter-reset: list-1 list-2 list-3 list-4 list-5 list-6 list-7 list-8 list-9;
+}
+
+/* Blog Item */
+.card-edit {
+  border: none !important;
+  /* border-radius: 20px !important; */
+  box-shadow: 0 15px 25px rgba(0, 0, 0, 0.5);
+}
+
+.card-edit .control-blogitem{
+  border: 1.5px solid #dde3e9;
+}
+
+.control-blogitem .view{
+  color: #b8c3ce;
+  font-size: 22px;
+  border-right: 1.5px solid #dde3e9;
+}
+
+.control-blogitem .update{
+  color: #b8c3ce;
+  font-size: 22px;
+}
+.control-blogitem .view:hover,
+.control-blogitem .update:hover{
+  color: #51575d;
+}
+
+.stt-card {
+  position: relative;
+  color: #61dafb;
+  width: 100%;
+  height: 60%;
+  /* border-radius: 2%; */
+  clip-path: circle(62% at 50% 3%);
+}
+
+.stt-card h2 {
+  color: #fff;
+  font-size: 4.5em;
+  padding-top: 30px;
+  font-weight: bold;
+}
+
+/* -------------------------------------- */
