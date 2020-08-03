@@ -31,7 +31,11 @@ function BlogItem(props) {
             {/* su dung cho getblogs */}
             {/* <p>{props.blog.writer.username}</p> */}
             {/* su dung getblogbyuser */}
-            <p>{props.username}</p>
+            <p>
+              {props.user.role === "admin"
+                ? props.blog.writer.username
+                : props.username}
+            </p>
             <br />
             <div dangerouslySetInnerHTML={{ __html: props.blog.content }} />
           </div>

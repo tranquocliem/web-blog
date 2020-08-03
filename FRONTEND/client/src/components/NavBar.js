@@ -63,6 +63,10 @@ const NavBar = (props) => {
             <i className="fa fa-home" />
             Home
           </NavLink>
+          <NavLink exact to="#">
+            <i className="fa fa-user" />
+            {user.username + "(" + user.role + ")"}
+          </NavLink>
         </li>
 
         {user.role === "admin" ? (
