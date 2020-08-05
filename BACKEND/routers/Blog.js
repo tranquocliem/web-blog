@@ -5,6 +5,7 @@ const passport = require("passport");
 const Blog = require("../models/Blog");
 const multer = require("multer");
 const User = require("../models/User");
+const Todo = require("../models/Todo");
 
 // STORAGE MULTER CONFIG
 //upload file
@@ -166,5 +167,41 @@ userRouter.get(
       });
   }
 );
+
+userRouter.get(
+  "/:id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Blog.findById(req.params.id)
+      .then((blog) => {
+        if (!blog) {
+          res.status(500).json({
+            message: {
+              msgBody: "Lấy dữ liệu không thành công",
+              msgError: true,
+            },
+          });
+        }
+        return res.status(200).json(blog);
+      })
+      .catch(() => {
+        res.status(500).json({
+          message: {
+            msgBody: "Không có dữ liệu cần tìm",
+            msgError: false,
+          },
+        });
+      });
+  }
+);
+
+userRouter.post("/getPost", (req, res) => {
+  Blog.findOne({ _id: req.body.postId })
+    .populate("writer")
+    .exec((err, post) => {
+      if (err) return res.status(400).send(err);
+      res.status(200).json({ success: true, post });
+    });
+});
 
 module.exports = userRouter;

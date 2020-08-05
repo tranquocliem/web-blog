@@ -71,22 +71,22 @@
   box-shadow: 0 15px 25px rgba(0, 0, 0, 0.5);
 }
 
-.card-edit .control-blogitem{
+.card-edit .control-blogitem {
   border: 1.5px solid #dde3e9;
 }
 
-.control-blogitem .view{
+.control-blogitem .view {
   color: #b8c3ce;
   font-size: 22px;
   border-right: 1.5px solid #dde3e9;
 }
 
-.control-blogitem .update{
+.control-blogitem .update {
   color: #b8c3ce;
   font-size: 22px;
 }
 .control-blogitem .view:hover,
-.control-blogitem .update:hover{
+.control-blogitem .update:hover {
   color: #51575d;
 }
 
@@ -107,3 +107,11 @@
 }
 
 /* -------------------------------------- */
+
+.content-img img {
+  width: 100%;
+}
+.content-img {
+  color: #b8c3ce;
+  text-shadow: 5px 5px 15px #343a40;
+}

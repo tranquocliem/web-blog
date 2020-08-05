@@ -69,7 +69,8 @@ class ImageBlot extends BlockEmbed {
     const imgTag = super.create();
     imgTag.setAttribute("src", value.src);
     imgTag.setAttribute("alt", value.alt);
-    imgTag.setAttribute("width", "100%");
+    // imgTag.setAttribute("width", "100%");
+    imgTag.setAttribute("width", "60%");
     return imgTag;
   }
 
@@ -88,7 +89,8 @@ class VideoBlot extends BlockEmbed {
       const videoTag = super.create();
       videoTag.setAttribute("src", value.src);
       videoTag.setAttribute("title", value.title);
-      videoTag.setAttribute("width", "100%");
+      // videoTag.setAttribute("width", "100%");
+      videoTag.setAttribute("width", "60%");
       videoTag.setAttribute("controls", "");
 
       return videoTag;
@@ -97,7 +99,8 @@ class VideoBlot extends BlockEmbed {
       iframeTag.setAttribute("src", value);
       iframeTag.setAttribute("frameborder", "0");
       iframeTag.setAttribute("allowfullscreen", true);
-      iframeTag.setAttribute("width", "100%");
+      // iframeTag.setAttribute("width", "100%");
+      iframeTag.setAttribute("width", "60%");
       return iframeTag;
     }
   }
@@ -261,15 +264,15 @@ class QuillEditor extends React.Component {
         if (response.data.success) {
           const quill = this.reactQuillRef.getEditor();
           quill.focus();
-
+          console.log(response.data);
           let range = quill.getSelection();
           let position = range ? range.index : 0;
 
           //먼저 노드 서버에다가 이미지를 넣은 다음에   여기 아래에 src에다가 그걸 넣으면 그게
           //이미지 블롯으로 가서  크리에이트가 이미지를 형성 하며 그걸 발류에서     src 랑 alt 를 가져간후에  editorHTML에 다가 넣는다.
           quill.insertEmbed(position, "image", {
-            src: "http://localhost:5000/" + response.data.url,
-            //src: response.data.url,
+            //src: "http://localhost:5000/" + response.data.url,
+            src: response.data.url,
             alt: response.data.fileName,
           });
           quill.setSelection(position + 1);
@@ -316,7 +319,8 @@ class QuillEditor extends React.Component {
           let range = quill.getSelection();
           let position = range ? range.index : 0;
           quill.insertEmbed(position, "video", {
-            src: "http://localhost:5000/" + response.data.url,
+            //src: "http://localhost:8080/" + response.data.url,
+            src: response.data.url,
             title: response.data.fileName,
           });
           quill.setSelection(position + 1);
@@ -356,7 +360,7 @@ class QuillEditor extends React.Component {
       };
       formData.append("file", file);
 
-      axios.post("/api/blog/uploadfiles", formData, config).then((response) => {
+      axios.post("/blog/uploadfiles", formData, config).then((response) => {
         if (response.data.success) {
           const quill = this.reactQuillRef.getEditor();
           quill.focus();

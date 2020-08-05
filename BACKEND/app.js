@@ -36,9 +36,9 @@ mongoose
 
 const userRouter = require("./routers/User");
 
-app.use('/',userRouter);
-app.use('/blog',require("./routers/Blog"));
-app.use('/uploads', express.static("uploads"));
+app.use("/", userRouter);
+app.use("/blog", require("./routers/Blog"));
+app.use("/uploads", express.static("uploads"));
 
 const PORT = process.env.PORT || 5000;
 

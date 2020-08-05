@@ -118,7 +118,7 @@ userRouter.get(
           res.status(500).json({
             message: {
               msgBody: "Lấy dữ liệu không thành công",
-              msgError: false,
+              msgError: true,
             },
           });
         return res.status(200).json(todo);
