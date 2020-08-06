@@ -173,25 +173,39 @@ userRouter.get(
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     Blog.findById(req.params.id)
-      .then((blog) => {
-        if (!blog) {
+      .populate("writer")
+      .exec((err, blog) => {
+        if (err) {
           res.status(500).json({
             message: {
               msgBody: "Lấy dữ liệu không thành công",
               msgError: true,
             },
           });
+        } else {
+          return res.status(200).json(blog);
         }
-        return res.status(200).json(blog);
-      })
-      .catch(() => {
-        res.status(500).json({
-          message: {
-            msgBody: "Không có dữ liệu cần tìm",
-            msgError: false,
-          },
-        });
       });
+    // Blog.findById(req.params.id)
+    //   .then((blog) => {
+    //     if (!blog) {
+    //       res.status(500).json({
+    //         message: {
+    //           msgBody: "Lấy dữ liệu không thành công",
+    //           msgError: true,
+    //         },
+    //       });
+    //     }
+    //     return res.status(200).json(blog);
+    //   })
+    //   .catch(() => {
+    //     res.status(500).json({
+    //       message: {
+    //         msgBody: "Không có dữ liệu cần tìm",
+    //         msgError: false,
+    //       },
+    //     });
+    //   });
   }
 );
 

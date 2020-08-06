@@ -115,3 +115,32 @@
   color: #b8c3ce;
   text-shadow: 5px 5px 15px #343a40;
 }
+.writer {
+  color: #b8c3ce;
+  /* text-shadow: 5px 5px 15px #343a40; */
+}
+
+.writer p{
+  text-shadow: 5px 5px 15px #343a40;
+  font-weight: bold;
+}
+
+/* pagination */
+.numberpage {
+  font-size: 15px;
+  border: 1px solid #dee2e6;
+  padding: 7px 20px 5px 20px;
+}
+
+.pagination{
+  background-color: whitesmoke;
+}
+
+#btnPrev,
+#btnNext,
+.numberpage,
+.dots {
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 20px;
+}
