@@ -11,7 +11,7 @@ const cookieExtractor = (req) => {
   //neu doi tuong yeu o do va yeu cau cookie cua chung ta khong trong
   //chung ta kiem tra xem co ma thong bao jwt o do khong
   if (req && req.cookies) {
-    token = req.cookies["access_token"];
+    token = req.cookies["access_token"];//yeu cau se duoc gui len cai token co ten nay
   }
   //cuoi cung la tra ra token
   return token;
@@ -33,6 +33,7 @@ passport.use(
       jwtFromRequest: cookieExtractor,
       //khoa ma ban dung de dang nhap ma thong bao de duoc goi la bi mat hoac khoa va se thiet lap de ma hoa
       //su dung de xac minh ma thong bao nay la hop phap (nen ta can tao ra cookieExtractor(chuc nang trich xuat cookie))
+      //trong jwt can co mot cai goi key de ko jwt dc bao mat hon
       secretOrKey: "QuocLiem",
     },
     //nhan lai dc payload va chuc nang hoan thanh

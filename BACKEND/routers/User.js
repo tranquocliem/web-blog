@@ -14,7 +14,7 @@ const signToken = (userID) => {
       sub: userID,
     },
     "QuocLiem",
-    { expiresIn: "1h" }
+    { expiresIn: "1h" } // thoi gian jwt ton tai
   ); //doi so thu nhat phai giong voi secretOrKey ben passport.js
 };
 
