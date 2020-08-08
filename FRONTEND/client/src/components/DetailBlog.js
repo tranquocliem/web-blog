@@ -29,7 +29,7 @@ function DetailBlog(props) {
             {post.title}
           </h1>
         </div>
-        <div className="row d-flex justify-content-center">
+        <div className="row-fluid d-flex justify-content-center">
           <div
             className="content-img"
             dangerouslySetInnerHTML={{ __html: post.content }}

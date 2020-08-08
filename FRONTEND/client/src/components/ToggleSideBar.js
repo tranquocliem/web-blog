@@ -1,28 +1,31 @@
 import React from "react";
-import $ from "jquery";
+// const ToggBar = () => {
+//   $(document).ready(function () {
+//     $("#sidebarCollapse").on("click", function () {
+//       $("#sidebar").toggleClass("active");
+//     });
+//   });
+// };
 
+const ToggleSiderBar = (props) => {
+  //chuyen ra ngoai app (con -> cha)
+  //o day khong co du lieu gi de chuyen chi biet la vua click vao button nay cho app biet de xu ly
+  const handleSliderBarClick = () => {
+    props.handleSliderBarClick(); //app chuyen vao 1 cai props la 1 ham de chuyen du lieu ra o day ko co gi de chuyen ra
+  };
 
-
-const ToggBar = () => {
-  $(document).ready(function () {
-    $("#sidebarCollapse").on("click", function () {
-      $("#sidebar").toggleClass("active");
-    });
-  });
-};
-
-const ToggleSiderBar = () => {
   return (
     <div className="container-fluid my-2 p-0">
       <div className="navbar-header">
         <button
+          data-title="Thay Đổi SliderBar"
           type="button"
           id="sidebarCollapse"
           className="btn btn-info navbar-btn"
-          onClick={ToggBar}
+          onClick={handleSliderBarClick}
         >
           <i className="fa fa-bars mx-2" />
-          <span>Double Click</span>
+          <span>{props.activeNav ? "Thụt Ra" : "Thụt Vào"}</span>
         </button>
       </div>
     </div>

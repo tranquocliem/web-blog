@@ -1,10 +1,11 @@
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { HashRouter } from "react-router-dom";
-import React from "react";
+import React, { useState } from "react";
 import NavBar from "./components/NavBar";
 import DuongDanURL from "./components/DuongDanURL";
 import TonggleSider from "./components/ToggleSideBar";
+import Footer from "./components/Footer";
 
 // class App extends Component {
 //   render() {
@@ -22,16 +23,28 @@ import TonggleSider from "./components/ToggleSideBar";
 //   }
 // }
 
-function App() {
+function App(props) {
+  const [activeNav, setActiveNav] = useState(false);
+
+  //app nhan lai mot ham de xu ly tu toggleSiderBar
+  const handleSliderBarClick = () => {
+    setActiveNav(!activeNav);
+  };
+
   return (
     <HashRouter>
       <div className="wrapper">
-        <NavBar />
+        {/* chuyen cai state active xuong NavBar (cha -> con thong qua props) */}
+        <NavBar activeNav={activeNav} />
         <div id="content">
-          <TonggleSider />
+          <TonggleSider
+            handleSliderBarClick={handleSliderBarClick}
+            activeNav={activeNav}
+          />
           <DuongDanURL />
         </div>
       </div>
+      <Footer />
     </HashRouter>
   );
 }

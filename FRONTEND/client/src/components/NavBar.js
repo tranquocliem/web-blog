@@ -63,7 +63,7 @@ const NavBar = (props) => {
             <i className="fa fa-home" />
             Home
           </NavLink>
-          <NavLink exact to="#">
+          <NavLink exact to="#" title={user.username}>
             <i className="fa fa-user" />
             {user.username + "(" + user.role + ")"}
           </NavLink>
@@ -129,7 +129,7 @@ const NavBar = (props) => {
   };
 
   return (
-    <nav id="sidebar">
+    <nav id="sidebar" className={props.activeNav ? "active" : ""}>
       <NavLink to="/">
         <div className="sidebar-header">
           <h3>M.E.R.N</h3>

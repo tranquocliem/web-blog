@@ -10,16 +10,16 @@ function BlogPage(props) {
   const [user, setUser] = useState([]);
 
   //state phang trang
-  const [currentPage, setCurrentPage] = useState(1);
-  const [newsPerPage, setNewsPerPage] = useState(3);
-  const [upperPageBound, setUpperPageBound] = useState(3);
-  const [lowerPageBound, setLowerPageBound] = useState(0);
-  const [isPrevBtnActive, setIsPrevBtnActive] = useState("disabled");
-  const [isNextBtnActive, setIsNextBtnActive] = useState("");
-  const [pageBound, setPageBound] = useState(3);
+  const [currentPage, setCurrentPage] = useState(1); //trang hien tai, mac dinh dau tien la trang 1
+  const [blogsPerPage, setblogsPerPage] = useState(3); // so luong hien thi
+  const [upperPageBound, setUpperPageBound] = useState(3); // so trang hien thi toi da tren thanh chuyen trang, mac dinh la 3
+  const [lowerPageBound, setLowerPageBound] = useState(0); // so trang hien thi toi thieu tren thanh chuyen trang, mac dinh la 0
+  const [isPrevBtnActive, setIsPrevBtnActive] = useState("disabled"); // dung de cap nhat trang thai cho nut prev, mac dinh la disable
+  const [isNextBtnActive, setIsNextBtnActive] = useState(""); // dung de cap nhat trang thai cho nut next
+  const [pageBound, setPageBound] = useState(3); // rang buoc trang
 
   // currentPage: 1,
-  // newsPerPage: 6,
+  // blogsPerPage: 6,
   // upperPageBound: 3,
   // lowerPageBound: 0,
   // isPrevBtnActive: "disabled",
@@ -34,7 +34,6 @@ function BlogPage(props) {
     AuthService.isAuthenticated().then((data) => {
       const { user } = data;
       setUser(user);
-      console.log(user.role);
     });
     //su dung cho getblog
     //BlogService.getBlog().then((data) => {
@@ -81,41 +80,51 @@ function BlogPage(props) {
 
   //ham phan trang
 
+  //cap nhat classname khi trang hien tai thay doi
   useEffect(() => {
     $("ul li.active").removeClass("active text-primary");
     $("ul li#" + currentPage).addClass("active text-primary");
   }, [currentPage]);
 
+  //thay doi so trang
   const handleClick = (event) => {
-    let listid = Number(event.target.id);
-    setCurrentPage(listid);
-    $("ul li.active").removeClass("active text-primary");
-    $("ul li#" + listid).addClass("active text-primary");
-    setPrevAndNextBtnClass(listid);
+    let listid = Number(event.target.id); // so trang vua click
+    setCurrentPage(listid); // set lai so trang hien tai cho state currentPage
+    $("ul li.active").removeClass("active text-primary"); //xoa
+    $("ul li#" + listid).addClass("active text-primary"); //cap nhat lai
+    setPrevAndNextBtnClass(listid); // cap nhat trang thai prev va next khi dang o trang vua click
   };
 
+  //cap nhat trang thai cho prev va next
+  //khi chuyen vao so trang
   const setPrevAndNextBtnClass = (listid) => {
-    let totalPage = Math.ceil(blogs.length / newsPerPage);
+    //tong so trang
+    let totalPage = Math.ceil(blogs.length / blogsPerPage); // ceil lam tron len
     setIsNextBtnActive("disabled");
     setIsPrevBtnActive("disabled");
     if (totalPage === listid && totalPage > 1) {
-      setIsPrevBtnActive("");
+      setIsPrevBtnActive(""); // neu tong trang === so trang dang hien thi tong so trang > 1 thi prev dc bat
     } else if (listid === 1 && totalPage > 1) {
-      setIsNextBtnActive("");
+      setIsNextBtnActive(""); // neu so trang dang hien === 1 (trang dau tien) va tong so trang > 1 thi nut next dc bat
     } else if (totalPage > 1) {
+      //con neu khong xac dinh tong so trang = may va trang hien tai la bao nhieu ma chi biet tong so trang > 1 prev next deu bat
       setIsPrevBtnActive("");
       setIsNextBtnActive("");
     }
   };
 
+  //tang so
+  //dung de click vao so
   const btnIncrementClick = () => {
     setUpperPageBound(upperPageBound + pageBound);
     setLowerPageBound(lowerPageBound + pageBound);
-    let listid = this.state.upperPageBound + 1;
+    let listid = upperPageBound + 1;
     setCurrentPage(listid);
     setPrevAndNextBtnClass(listid);
   };
 
+  //giam so
+  //dung de click vao so
   const btnDecrementClick = () => {
     setUpperPageBound(upperPageBound + pageBound);
     setLowerPageBound(lowerPageBound + pageBound);
@@ -124,16 +133,24 @@ function BlogPage(props) {
     setPrevAndNextBtnClass(listid);
   };
 
+  //giam so trang
+  //dung de click vao nut prev
   const btnPrevClick = () => {
+    //truong hop khong the xay ra
+    //vi luc nao trang hien tai cung nho hon pageBound
     if ((currentPage - 1) % pageBound === 0) {
       setUpperPageBound(upperPageBound - pageBound);
       setLowerPageBound(lowerPageBound - pageBound);
     }
-    let listid = currentPage - 1;
-    setCurrentPage(listid);
-    setPrevAndNextBtnClass(listid);
+
+    //truong hop xay ra
+    let listid = currentPage - 1; //trang hien tai tru 1
+    setCurrentPage(listid); // set lai state currentPage
+    setPrevAndNextBtnClass(listid); // cap nhat lai cac nut
   };
 
+  //tang so trang
+  //dung de click vao nut next
   const btnNextClick = () => {
     if (currentPage + 1 > upperPageBound) {
       setUpperPageBound(upperPageBound + pageBound);
@@ -145,9 +162,9 @@ function BlogPage(props) {
   };
 
   // Logic for displaying current blogs
-  const indexOfLastNew = currentPage * newsPerPage;
-  const indexOfFirstNew = indexOfLastNew - newsPerPage;
-  const currentblogs = blogs.slice(indexOfFirstNew, indexOfLastNew);
+  const indexOfLastNew = currentPage * blogsPerPage; //vd dang o trang 1  = 3
+  const indexOfFirstNew = indexOfLastNew - blogsPerPage; // 3 - 3 = 0
+  const currentblogs = blogs.slice(indexOfFirstNew, indexOfLastNew); // lay trong khoang tu 0 -> 3
 
   //console.log(user);
   //console.log(blogs);
@@ -176,7 +193,7 @@ function BlogPage(props) {
 
   // Logic for displaying page numbers
   const pageNumbers = [];
-  for (let i = 1; i <= Math.ceil(blogs.length / newsPerPage); i++) {
+  for (let i = 1; i <= Math.ceil(blogs.length / blogsPerPage); i++) {
     pageNumbers.push(i);
   }
 
@@ -300,15 +317,17 @@ function BlogPage(props) {
         <div className="row mt-2 d-flex justify-content-center">
           {renderContent}
         </div>
-        <div className="row d-flex justify-content-center">
-          <ul id="page-numbers" className="pagination justify-content-center">
-            {renderPrevBtn}
-            {pageDecrementBtn}
-            {renderPageNumbers}
-            {pageIncrementBtn}
-            {renderNextBtn}
-          </ul>
-        </div>
+        {blogs.length >= 3 ? (
+          <div className="row d-flex justify-content-center">
+            <ul id="page-numbers" className="pagination justify-content-center">
+              {renderPrevBtn}
+              {pageDecrementBtn}
+              {renderPageNumbers}
+              {pageIncrementBtn}
+              {renderNextBtn}
+            </ul>
+          </div>
+        ) : null}
       </div>
     );
   } else {
