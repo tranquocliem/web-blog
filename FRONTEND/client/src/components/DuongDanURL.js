@@ -13,6 +13,7 @@ import UnPrivateRouter from "../ProtectingRouter/UnPrivateRouter";
 import CreateBlog from "./CreateBlog";
 import BlogPage from "./BlogPage";
 import DetailBlog from "./DetailBlog";
+import UpdateBlog from "./UpdateBlog";
 class DuongDanURL extends Component {
   render() {
     return (
@@ -41,9 +42,26 @@ class DuongDanURL extends Component {
           component={Users}
         />
         <PrivateRouter path="/todos" roles={["user"]} component={TodosUser} />
-        <PrivateRouter path="/blog/create" roles={["user","admin"]} component={CreateBlog}/>
-        <PrivateRouter path="/blogs" roles={["user","admin"]} component={BlogPage}/>
-        <PrivateRouter path="/post/:tieude/:id.html" roles={["user","admin"]} component={DetailBlog}/>
+        <PrivateRouter
+          path="/blog/create"
+          roles={["user", "admin"]}
+          component={CreateBlog}
+        />
+        <PrivateRouter
+          path="/blogs"
+          roles={["user", "admin"]}
+          component={BlogPage}
+        />
+        <PrivateRouter
+          path="/post/:tieude/:id.html"
+          roles={["user", "admin"]}
+          component={DetailBlog}
+        />
+        <PrivateRouter
+          path="/update"
+          roles={["user", "admin"]}
+          component={UpdateBlog}
+        />
 
         {/* <Route path="/admin/users" component={Users} /> */}
         {/* <Route path="/admin/todos" component={Todos} /> */}

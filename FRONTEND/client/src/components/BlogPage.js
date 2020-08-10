@@ -76,7 +76,7 @@ function BlogPage(props) {
         setUserName(username);
       });
     }
-  }, [user]);
+  }, [blogs]);
 
   //ham phan trang
 
@@ -88,6 +88,7 @@ function BlogPage(props) {
 
   //thay doi so trang
   const handleClick = (event) => {
+    window.scrollTo(0, 0); //về đầu trang
     let listid = Number(event.target.id); // so trang vua click
     setCurrentPage(listid); // set lai so trang hien tai cho state currentPage
     $("ul li.active").removeClass("active text-primary"); //xoa
@@ -136,6 +137,7 @@ function BlogPage(props) {
   //giam so trang
   //dung de click vao nut prev
   const btnPrevClick = () => {
+    window.scrollTo(0, 0);
     //truong hop khong the xay ra
     //vi luc nao trang hien tai cung nho hon pageBound
     if ((currentPage - 1) % pageBound === 0) {
@@ -152,6 +154,7 @@ function BlogPage(props) {
   //tang so trang
   //dung de click vao nut next
   const btnNextClick = () => {
+    window.scrollTo(0, 0);
     if (currentPage + 1 > upperPageBound) {
       setUpperPageBound(upperPageBound + pageBound);
       setLowerPageBound(lowerPageBound + pageBound);
@@ -317,7 +320,7 @@ function BlogPage(props) {
         <div className="row mt-2 d-flex justify-content-center">
           {renderContent}
         </div>
-        {blogs.length >= 3 ? (
+        {blogs.length > 3 ? (
           <div className="row d-flex justify-content-center">
             <ul id="page-numbers" className="pagination justify-content-center">
               {renderPrevBtn}

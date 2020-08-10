@@ -65,7 +65,9 @@ const NavBar = (props) => {
           </NavLink>
           <NavLink exact to="#" title={user.username}>
             <i className="fa fa-user" />
-            {user.username + "(" + user.role + ")"}
+            <span className="username">
+              {user.username + "(" + user.role + ")"}
+            </span>
           </NavLink>
         </li>
 
@@ -172,11 +174,6 @@ const NavBar = (props) => {
           </Link>
         </li> */}
       </ul>
-      <footer id="sticky-footer" className="py-4 bg-dark text-white-50">
-        <div className="container text-center">
-          <small>Copyright © Your Website</small>
-        </div>
-      </footer>
     </nav>
   );
 };

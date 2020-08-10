@@ -26,7 +26,7 @@ function Footer() {
                   href="https://www.facebook.com/profile.php?id=100008464638082"
                 >
                   <i
-                    class="fab fa-facebook-square white-text mr-4"
+                    className="fab fa-facebook-square white-text mr-4"
                     style={{ fontSize: "30px", fontWeight: "bold" }}
                   ></i>
                 </a>
@@ -36,7 +36,7 @@ function Footer() {
                   href="https://www.youtube.com/channel/UC488JjMyalqMl7ST0YVEu6w?view_as=subscriber"
                 >
                   <i
-                    class="fab fa-youtube mr-4"
+                    className="fab fa-youtube mr-4"
                     style={{
                       fontSize: "30px",
                       fontWeight: "bold",

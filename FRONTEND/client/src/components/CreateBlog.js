@@ -65,6 +65,7 @@ function CreateBlog(props) {
 
   const onSubmit = (event) => {
     event.preventDefault();
+    window.scrollTo(0, 0);
     const colorRand = getRandomColor();
     const variables = {
       //nhung thu can thiet cua model blog
@@ -82,7 +83,7 @@ function CreateBlog(props) {
         console.log(data);
         setTimeout(() => {
           props.history.push("/blogs");
-        }, 1000);
+        }, 1500);
       } else if (message.msgBody === "Error") {
         setMessage(message);
         authContext.setUser({ username: "", role: "" });

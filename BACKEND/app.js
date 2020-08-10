@@ -3,6 +3,39 @@ const app = express();
 const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
 
+/*thu nghiem co the delete */
+
+var fileupload = require("express-fileupload");
+app.use(
+  fileupload({
+    useTempFiles: true,
+  })
+);
+
+var cloudinary = require("cloudinary").v2;
+
+cloudinary.config({
+  cloud_name: "tranquocliem",
+  api_key: "942711663182255",
+  api_secret: "jgZrUVMajdSmICxNyX3Pt0XS1QI",
+});
+
+app.post("/up", function (req, res, next) {
+  const file = req.files.file;
+  //console.log(file);
+  cloudinary.uploader.upload(file.tempFilePath, function (err, result) {
+    // console.log(err);
+    // console.log(result);
+    if (err) {
+      return res.json({ success: false, err });
+    } else {
+      return res.json({ success: true, result });
+    }
+  });
+});
+
+/*thu nghiem co the delete */
+
 //phan tich cookie
 app.use(cookieParser());
 

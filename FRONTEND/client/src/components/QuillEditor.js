@@ -68,6 +68,7 @@ class ImageBlot extends BlockEmbed {
   static create(value) {
     const imgTag = super.create();
     imgTag.setAttribute("src", value.src);
+    // imgTag.setAttribute("src", value.url);
     imgTag.setAttribute("alt", value.alt);
     // imgTag.setAttribute("width", "100%");
     imgTag.setAttribute("width", "60%");
@@ -243,6 +244,60 @@ class QuillEditor extends React.Component {
     this.inputOpenFileRef.current.click();
   };
 
+  //upload dưới local
+  // insertImage = (e) => {
+  //   e.stopPropagation();
+  //   e.preventDefault();
+
+  //   if (
+  //     e.currentTarget &&
+  //     e.currentTarget.files &&
+  //     e.currentTarget.files.length > 0
+  //   ) {
+  //     const file = e.currentTarget.files[0];
+
+  //     let formData = new FormData();
+  //     const config = {
+  //       header: { "content-type": "multipart/form-data" },
+  //     };
+  //     formData.append("file", file);
+
+  //     axios.post("/blog/uploadfiles", formData, config).then((response) => {
+  //       if (response.data.success) {
+  //         const quill = this.reactQuillRef.getEditor();
+  //         quill.focus();
+  //         console.log(response.data);
+  //         let range = quill.getSelection();
+  //         let position = range ? range.index : 0;
+
+  //         //먼저 노드 서버에다가 이미지를 넣은 다음에   여기 아래에 src에다가 그걸 넣으면 그게
+  //         //이미지 블롯으로 가서  크리에이트가 이미지를 형성 하며 그걸 발류에서     src 랑 alt 를 가져간후에  editorHTML에 다가 넣는다.
+  //         quill.insertEmbed(position, "image", {
+  //           //src: "http://localhost:5000/" + response.data.url,
+  //           src: response.data.url,
+  //           alt: response.data.fileName,
+  //         });
+  //         quill.setSelection(position + 1);
+
+  //         if (this._isMounted) {
+  //           this.setState(
+  //             {
+  //               files: [...this.state.files, file],
+  //             },
+  //             () => {
+  //               this.props.onFilesChange(this.state.files);
+  //             }
+  //           );
+  //         }
+  //       } else {
+  //         return alert("failed to upload file");
+  //       }
+  //     });
+  //   }
+  // };
+  //upload dưới local
+
+  //sử dụng upload ảnh lên cloudinary
   insertImage = (e) => {
     e.stopPropagation();
     e.preventDefault();
@@ -260,20 +315,16 @@ class QuillEditor extends React.Component {
       };
       formData.append("file", file);
 
-      axios.post("/blog/uploadfiles", formData, config).then((response) => {
+      axios.post("/up", formData, config).then((response) => {
         if (response.data.success) {
           const quill = this.reactQuillRef.getEditor();
           quill.focus();
-          console.log(response.data);
           let range = quill.getSelection();
           let position = range ? range.index : 0;
 
-          //먼저 노드 서버에다가 이미지를 넣은 다음에   여기 아래에 src에다가 그걸 넣으면 그게
-          //이미지 블롯으로 가서  크리에이트가 이미지를 형성 하며 그걸 발류에서     src 랑 alt 를 가져간후에  editorHTML에 다가 넣는다.
           quill.insertEmbed(position, "image", {
-            //src: "http://localhost:5000/" + response.data.url,
-            src: response.data.url,
-            alt: response.data.fileName,
+            src: response.data.result.url,
+            alt: response.data.result.original_filename,
           });
           quill.setSelection(position + 1);
 
@@ -293,6 +344,7 @@ class QuillEditor extends React.Component {
       });
     }
   };
+  //sử dụng upload ảnh lên cloudinary
 
   insertVideo = (e) => {
     e.stopPropagation();

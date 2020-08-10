@@ -84,9 +84,17 @@
 .control-blogitem .update {
   color: #b8c3ce;
   font-size: 22px;
+  border-right: 1.5px solid #dde3e9;
 }
+
+.control-blogitem .delete {
+  color: #b8c3ce;
+  font-size: 22px;
+}
+
 .control-blogitem .view:hover,
-.control-blogitem .update:hover {
+.control-blogitem .update:hover,
+.control-blogitem .delete:hover {
   color: #51575d;
 }
 
@@ -108,10 +116,11 @@
 
 /* -------------------------------------- */
 
-.content-img img {
+/* desigh content */
+.content img {
   width: 100%;
 }
-.content-img {
+.content {
   color: #b8c3ce;
   text-shadow: 5px 5px 15px #343a40;
 }
@@ -145,6 +154,7 @@
   font-size: 20px;
 }
 
+/* desigh title */
 [data-title]:hover:after {
   opacity: 1;
   transition: all 0.1s ease 0.5s;
@@ -169,3 +179,16 @@
 [data-title] {
   position: relative;
 }
+
+/* desigh code text */
+pre.ql-syntax {
+  background-color: #23241f;
+  color: #f8f8f2;
+  /* overflow: visible; */
+  padding: 5px 10px;
+  border-radius: 3px;
+}
+
+/* .content-img pre.ql-syntax{
+  overflow: visible;
+} */

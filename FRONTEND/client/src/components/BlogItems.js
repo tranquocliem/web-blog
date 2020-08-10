@@ -1,5 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import swal from "sweetalert";
+import BlogService from "../Services/BlogService";
 
 function BlogItem(props) {
   const chuyenDoiURL = (str) => {
@@ -30,6 +32,31 @@ function BlogItem(props) {
     // return
     return str;
   };
+
+  const deletePost = () => {
+    swal({
+      title: "Bạn Có Chắc Không?",
+      text: "Nếu xoá bài đăng này sẽ không khôi phục lại được",
+      icon: "warning",
+      buttons: true, //hiển nút huỷ bên cạnh bên cạnh nút xác nhận mặc định
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        BlogService.deleteBlog(props.blog._id)
+          .then(
+            swal("Xoá Thành Công", {
+              icon: "success",
+            })
+          )
+          .catch((err) => console.log(err));
+      }
+    });
+  };
+
+  const toTop = () => {
+    window.scrollTo(0, 0);
+  };
+
   return (
     // {props.index}
     <div className="col-12 col-sm-6 col-lg-4 col-xl-4">
@@ -69,14 +96,24 @@ function BlogItem(props) {
           </div>
           <div className="control-blogitem mt-2 py-1">
             <div className="row d-flex justify-content-center mt-1">
+              <Link to="/update">
+                <i className="fas fa-cog update px-3"></i>
+              </Link>
               <Link
-                to={"/post/" + chuyenDoiURL(props.blog.title) + "/" + props.blog._id + ".html"}
+                to={
+                  "/post/" +
+                  chuyenDoiURL(props.blog.title) +
+                  "/" +
+                  props.blog._id +
+                  ".html"
+                }
+                onClick={toTop}
               >
                 <i className="fas fa-eye view px-3"></i>
               </Link>
-              <Link to="/">
-                <i className="fas fa-cog update px-3"></i>
-              </Link>
+              <div onClick={deletePost}>
+                <i className="fas fa-trash-alt delete px-3"></i>
+              </div>
             </div>
           </div>
         </div>

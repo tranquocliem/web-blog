@@ -69,4 +69,14 @@ export default {
       }
     });
   },
+
+  deleteBlog: (id) => {
+    return axios.get("/blog/deletePost/" + id).then((res) => {
+      if (res.status !== 400) {
+        return res.data;
+      } else {
+        return { message: { msgBody: "Error", msgError: true } };
+      }
+    });
+  },
 };

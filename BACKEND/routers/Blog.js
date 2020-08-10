@@ -168,6 +168,7 @@ userRouter.get(
   }
 );
 
+//lấy dữ liệu theo id
 userRouter.get(
   "/:id",
   passport.authenticate("jwt", { session: false }),
@@ -209,13 +210,43 @@ userRouter.get(
   }
 );
 
-userRouter.post("/getPost", (req, res) => {
-  Blog.findOne({ _id: req.body.postId })
-    .populate("writer")
-    .exec((err, post) => {
-      if (err) return res.status(400).send(err);
-      res.status(200).json({ success: true, post });
+//lấy dữ liệu thông qua param
+userRouter.post(
+  "/getPost",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Blog.findOne({ _id: req.body.postId })
+      .populate("writer")
+      .exec((err, post) => {
+        if (err) return res.status(400).send(err);
+        res.status(200).json({ success: true, post });
+      });
+  }
+);
+
+//xoá dữ liệu
+userRouter.get(
+  "/deletePost/:id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Blog.findByIdAndDelete({ _id: req.params.id }, (err, blog) => {
+      if (err) {
+        res.status(500).json({
+          message: {
+            msgBody: "Không có dữ liệu cần tìm",
+            msgError: true,
+          },
+        });
+      } else {
+        res.status(200).json({
+          message: {
+            msgBody: "Xoá thành công",
+            msgError: false,
+          },
+        });
+      }
     });
-});
+  }
+);
 
 module.exports = userRouter;
