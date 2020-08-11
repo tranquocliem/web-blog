@@ -58,7 +58,7 @@ class DuongDanURL extends Component {
           component={DetailBlog}
         />
         <PrivateRouter
-          path="/update"
+          path="/update/:id"
           roles={["user", "admin"]}
           component={UpdateBlog}
         />

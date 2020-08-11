@@ -187,6 +187,7 @@ class QuillEditor extends React.Component {
   bandId;
   placeholder;
   onEditorChange;
+  Value;
   onFilesChange;
   onPollsChange;
   _isMounted;
@@ -215,7 +216,7 @@ class QuillEditor extends React.Component {
   }
 
   handleChange = (html) => {
-    console.log("html", html);
+    //console.log("html", html);
     // https://youtu.be/BbR-QCoKngE
     // https://www.youtube.com/embed/ZwKhufmMxko
     // https://tv.naver.com/v/9176888
@@ -363,7 +364,7 @@ class QuillEditor extends React.Component {
       };
       formData.append("file", file);
 
-      axios.post("/blog/uploadfiles", formData, config).then((response) => {
+      axios.post("/up", formData, config).then((response) => {
         if (response.data.success) {
           const quill = this.reactQuillRef.getEditor();
           quill.focus();
@@ -371,9 +372,9 @@ class QuillEditor extends React.Component {
           let range = quill.getSelection();
           let position = range ? range.index : 0;
           quill.insertEmbed(position, "video", {
-            //src: "http://localhost:8080/" + response.data.url,
-            src: response.data.url,
-            title: response.data.fileName,
+            //src: "http://localhost:5000/" + response.data.url,
+            src: response.data.result.url,
+            title: response.data.result.originalfilename,
           });
           quill.setSelection(position + 1);
 
@@ -412,14 +413,18 @@ class QuillEditor extends React.Component {
       };
       formData.append("file", file);
 
-      axios.post("/blog/uploadfiles", formData, config).then((response) => {
+      axios.post("/up", formData, config).then((response) => {
         if (response.data.success) {
           const quill = this.reactQuillRef.getEditor();
           quill.focus();
 
           let range = quill.getSelection();
           let position = range ? range.index : 0;
-          quill.insertEmbed(position, "file", response.data.fileName);
+          quill.insertEmbed(
+            position,
+            "file",
+            response.data.result.original_filename
+          );
           quill.setSelection(position + 1);
 
           if (this._isMounted) {
@@ -481,6 +486,7 @@ class QuillEditor extends React.Component {
             modules={this.modules}
             formats={this.formats}
             value={this.state.editorHtml}
+            //value={this.props.Temp}
             placeholder={this.props.placeholder}
           />
           <input

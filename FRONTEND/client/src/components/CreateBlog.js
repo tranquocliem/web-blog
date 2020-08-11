@@ -22,12 +22,12 @@ function CreateBlog(props) {
 
   const onEditorChange = (value) => {
     setContent(value);
-    //console.log(content);
+    console.log(content);
   };
 
   const onFilesChange = (files) => {
     setFiles(files);
-    //console.log(files);
+    console.log(files);
   };
 
   //lay duoc cac thong tin tai khoan dang dang nhap va luu vao state user
@@ -95,6 +95,7 @@ function CreateBlog(props) {
       }
     });
   };
+  console.log(content);
   return (
     <div className="container-fluid my-2 p-0">
       <div className="jumbotron mt-2">
@@ -113,6 +114,7 @@ function CreateBlog(props) {
             placeholder={"Bắt đầu nhập..."}
             onEditorChange={onEditorChange}
             onFilesChange={onFilesChange}
+            //Value={Value}
           />
           <form onSubmit={onSubmit}>
             <div className="form-group">

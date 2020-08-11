@@ -79,4 +79,21 @@ export default {
       }
     });
   },
+
+  updateBlog: (id, data) => {
+    return axios
+      .post("/blog/update/" + id, data)
+      .then((res) => {
+        if (res.status !== 400) {
+          return res.data;
+        } else {
+          return { message: { msgBody: "Error" }, msgError: true };
+        }
+      })
+      .catch((err) => {
+        return {
+          message: { msgBody: "Cập Nhật Không Thành Công", msgError: true },
+        };
+      });
+  },
 };

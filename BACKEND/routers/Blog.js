@@ -249,4 +249,52 @@ userRouter.get(
   }
 );
 
+//cập nhật dữ liệu
+userRouter.post(
+  "/update/:id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Blog.findById(req.params.id)
+      .then((blog) => {
+        if (!blog)
+          res.status(500).json({
+            message: {
+              msgBody: "Lấy dữ liệu không thành công",
+              msgError: true,
+            },
+          });
+        blog.title = req.body.title;
+        blog.content = req.body.content;
+
+        blog
+          .save()
+          .then((bl) => {
+            res.status(200).json({
+              ...bl.toObject(),
+              message: {
+                msgBody: "Cập nhật dữ liệu thành công",
+                msgError: false,
+              },
+            });
+          })
+          .catch((err) => {
+            res.status(500).json({
+              message: {
+                msgBody: "Cập nhật dữ liệu không thành công",
+                msgError: true,
+              },
+            });
+          });
+      })
+      .catch(() => {
+        res.status(500).json({
+          message: {
+            msgBody: "Không có dữ liệu cần tìm",
+            msgError: true,
+          },
+        });
+      });
+  }
+);
+
 module.exports = userRouter;

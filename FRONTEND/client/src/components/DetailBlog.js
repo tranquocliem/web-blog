@@ -7,20 +7,24 @@ function DetailBlog(props) {
   //console.log(props);
   const [post, setPost] = useState([]);
   const [date, setDate] = useState("");
+  const [dateUpdate, setDateUpdate] = useState("");
   const postId = props.match.params.id;
   useEffect(() => {
     BlogService.getBlogById(postId).then((data) => {
       //console.log(data.writer.username);
       setDate(data.createdAt);
+      setDateUpdate(data.updatedAt);
       setPost(data);
     });
   }, [postId]);
-  //console.log(post);
+
+  //console.log(dateUpdate);
   //console.log(date);
   // const formatDate = () => {
   //   date.split(0, 8);
   // };
   // console.log(formatDate);
+  //console.log(post.updatedAt);
   if (post.writer) {
     return (
       <div className="container-fluid my-2 p-0">
@@ -35,13 +39,16 @@ function DetailBlog(props) {
             dangerouslySetInnerHTML={{ __html: post.content }}
           />
         </div>
-        <div className="row writer">
+        <div className="row writer mt-5">
           <div className="col">
             <i>
               <p>
                 Người đăng:{" "}
                 {post.writer !== undefined ? post.writer.username : ""}, Ngày
                 đăng: {date.substr(0, 10)}{" "}
+                {date !== dateUpdate
+                  ? `, Ngày Cập Nhật: ${dateUpdate.substr(0, 10)}`
+                  : null}
               </p>
             </i>
           </div>
