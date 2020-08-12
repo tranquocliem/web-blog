@@ -5,7 +5,7 @@ import BlogItem from "./BlogItems";
 import $ from "jquery";
 import { Link } from "react-router-dom";
 
-function BlogPage(props) {
+const BlogPage = (props) => {
   const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState([]);
 
@@ -16,7 +16,7 @@ function BlogPage(props) {
   const [lowerPageBound, setLowerPageBound] = useState(0); // so trang hien thi toi thieu tren thanh chuyen trang, mac dinh la 0
   const [isPrevBtnActive, setIsPrevBtnActive] = useState("disabled"); // dung de cap nhat trang thai cho nut prev, mac dinh la disable
   const [isNextBtnActive, setIsNextBtnActive] = useState(""); // dung de cap nhat trang thai cho nut next
-  const [pageBound, setPageBound] = useState(3); // rang buoc trang
+  const [pageBound, setPageBound] = useState(2); // rang buoc trang (luon nho hon so luong du lieu hien thi)
 
   // currentPage: 1,
   // blogsPerPage: 6,
@@ -34,7 +34,7 @@ function BlogPage(props) {
     AuthService.isAuthenticated().then((data) => {
       const { user } = data;
       setUser(user);
-    });
+    }, []);
     //su dung cho getblog
     //BlogService.getBlog().then((data) => {
     //const { blogs, message } = data; // const blogs = data.blogs; const message = data.message
@@ -58,7 +58,7 @@ function BlogPage(props) {
   }, []);
   //lay du lieu
   useEffect(() => {
-    //su dung cho getblog
+    //su dung cho getblog neu la admin (load het)
     if (user.role === "admin")
       BlogService.getBlog().then((data) => {
         const { blogs, message } = data; // const blogs = data.blogs; const message = data.message
@@ -67,7 +67,7 @@ function BlogPage(props) {
         // console.log(blogs);
         // console.log(message);
       });
-    //su dung cho getblogbyuser
+    //su dung cho getblogbyuser neu la user (chi load cac blog cua user do)
     else {
       BlogService.getBlogByUser().then((data) => {
         const { blogs, username } = data.blogs;
@@ -127,8 +127,8 @@ function BlogPage(props) {
   //giam so
   //dung de click vao so
   const btnDecrementClick = () => {
-    setUpperPageBound(upperPageBound + pageBound);
-    setLowerPageBound(lowerPageBound + pageBound);
+    setUpperPageBound(upperPageBound - pageBound);
+    setLowerPageBound(lowerPageBound - pageBound);
     let listid = upperPageBound - pageBound;
     setCurrentPage(listid);
     setPrevAndNextBtnClass(listid);
@@ -235,7 +235,7 @@ function BlogPage(props) {
   if (pageNumbers.length > upperPageBound) {
     pageIncrementBtn = (
       <li className="text-primary page-link dots" onClick={btnIncrementClick}>
-        {/* <div onClick={this.btnIncrementClick}> &hellip; </div> */}
+        {/* <div onClick={btnIncrementClick}> &hellip; </div> */}
         &hellip;
       </li>
     );
@@ -245,7 +245,7 @@ function BlogPage(props) {
   if (lowerPageBound >= 1) {
     pageDecrementBtn = (
       <li className="text-primary page-link dots" onClick={btnDecrementClick}>
-        {/* <div onClick={this.btnDecrementClick}> &hellip; </div> */}
+        {/* <div onClick={btnDecrementClick}> &hellip; </div> */}
         &hellip;
       </li>
     );
@@ -360,6 +360,6 @@ function BlogPage(props) {
       </div>
     );
   }
-}
+};
 
 export default BlogPage;

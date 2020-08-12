@@ -9,7 +9,7 @@ function Footer() {
         style={{ backgroundColor: "#DDDDDD" }}
       >
         <div style={{ backgroundColor: "#0066CC" }}>
-          <div className="container">
+          <div className="container-fluid">
             <div className="row py-4 d-flex align-items-center">
               <div className="col-md-6 col-lg-5 text-center text-md-left mb-4 mb-md-0">
                 <h6

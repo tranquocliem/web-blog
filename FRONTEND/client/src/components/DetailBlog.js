@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import BlogService from "../Services/BlogService";
+import moment from "moment";
+import "moment/locale/vi";
 
 // import { Container } from './styles';
 
@@ -9,6 +11,7 @@ function DetailBlog(props) {
   const [date, setDate] = useState("");
   const [dateUpdate, setDateUpdate] = useState("");
   const postId = props.match.params.id;
+
   useEffect(() => {
     BlogService.getBlogById(postId).then((data) => {
       //console.log(data.writer.username);
@@ -25,6 +28,10 @@ function DetailBlog(props) {
   // };
   // console.log(formatDate);
   //console.log(post.updatedAt);
+  const dCreate = moment(date).format("L");
+  const dUpdate = moment(dateUpdate).format("L");
+  const upd = moment(dateUpdate).fromNow();
+  const cred = moment(date).fromNow();
   if (post.writer) {
     return (
       <div className="container-fluid my-2 p-0">
@@ -43,12 +50,29 @@ function DetailBlog(props) {
           <div className="col">
             <i>
               <p>
-                Người đăng:{" "}
+                {/* Người đăng:{" "}
                 {post.writer !== undefined ? post.writer.username : ""}, Ngày
                 đăng: {date.substr(0, 10)}{" "}
                 {date !== dateUpdate
                   ? `, Ngày Cập Nhật: ${dateUpdate.substr(0, 10)}`
-                  : null}
+                  : null} */}
+                {/* {`Người đăng: ${
+                  post.writer !== undefined ? post.writer.username : ""
+                }, Ngày đăng: ${moment(date).format("L")} ${
+                  date !== dateUpdate
+                    ? `Ngày cập nhật: ${moment(dateUpdate).format("L")}`
+                    : null
+                }`} */}
+                Người đăng:{" "}
+                {post.writer !== undefined ? post.writer.username : ""}, Ngày
+                đăng: {dCreate}
+                {""}
+                {dCreate === dUpdate ? null : `, Ngày cập nhật: ${dUpdate}`}
+              </p>
+              <p>Đã đăng được {moment(date).fromNow()}</p>
+              <p>
+                {upd !== cred ? `Đã cập nhật được ${upd}` : null}
+                {/* Đã cập nhật được {moment(dateUpdate).fromNow()} */}
               </p>
             </i>
           </div>

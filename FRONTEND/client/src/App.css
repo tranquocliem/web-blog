@@ -64,11 +64,25 @@
   counter-reset: list-1 list-2 list-3 list-4 list-5 list-6 list-7 list-8 list-9;
 }
 
+.quill .ql-editor a {
+  color: #111 !important;
+  /* text-decoration: none !important; */
+}
+
 /* Blog Item */
 .card-edit {
   border: none !important;
   /* border-radius: 20px !important; */
   box-shadow: 0 15px 25px rgba(0, 0, 0, 0.5);
+}
+
+.card-body a {
+  color: #51575d !important;
+}
+
+.card-body a:hover {
+  color: #007bff !important;
+  border-bottom: 1px solid #007bff;
 }
 
 .card-edit .control-blogitem {
