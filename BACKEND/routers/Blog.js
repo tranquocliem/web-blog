@@ -6,6 +6,29 @@ const Blog = require("../models/Blog");
 const multer = require("multer");
 const User = require("../models/User");
 const Todo = require("../models/Todo");
+const Favorite = require("../models/Favorite");
+
+var cloudinary = require("cloudinary").v2;
+
+cloudinary.config({
+  cloud_name: "tranquocliem",
+  api_key: "942711663182255",
+  api_secret: "jgZrUVMajdSmICxNyX3Pt0XS1QI",
+});
+
+// userRouter.post("/up", function (req, res, next) {
+//   // const file = req.files.file;
+//   //console.log(file);
+//   cloudinary.uploader.upload(file.tempFilePath, function (err, result) {
+//     // console.log(err);
+//     // console.log(result);
+//     if (err) {
+//       return res.json({ success: false, err });
+//     } else {
+//       return res.json({ success: true, result });
+//     }
+//   });
+// });
 
 // STORAGE MULTER CONFIG
 //upload file
@@ -32,12 +55,41 @@ let storage = multer.diskStorage({
   },
 });
 
+//upload hinh anh len cloudiary
+userRouter.post("/image", (req, res, next) => {
+  //const upload = multer({ storage }).single("name-of-input-key");
+  upload(req, res, function (err) {
+    if (err) {
+      return res.send(err);
+    }
+    console.log("file uploaded to server");
+    console.log(req.file);
+
+    const path = req.file.path;
+    const uniqueFilename = new Date().toISOString();
+
+    cloudinary.uploader.upload(
+      path,
+      { public_id: `blog/${uniqueFilename}`, tags: `blog` }, // directory and tags are optional
+      function (err, result) {
+        if (err) {
+          return res.json({ success: false, err });
+        } else {
+          // xoa file trong thu muc uploads khi da up len cloud
+          const fs = require("fs");
+          fs.unlinkSync(path);
+          return res.json({ success: true, result });
+        }
+      }
+    );
+  });
+});
+
 //bien upload file
 //noi luu tru la storage
 //.single la de tai tung file len server
 const upload = multer({ storage: storage }).single("file");
 
-//api uploadfiles
 userRouter.post("/uploadfiles", (req, res) => {
   upload(req, res, (err) => {
     if (err) {
@@ -90,7 +142,7 @@ userRouter.post(
           if (err) {
             return res.status(500).json({
               message: {
-                msgBody: "Có lỗi khi User này thêm todo",
+                msgBody: "Có lỗi khi User này thêm Blogs",
                 msgError: true,
               },
             });
@@ -142,7 +194,6 @@ userRouter.get(
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     //tim theo id va lay khoa chinh todos
-
     User.findById({ _id: req.user._id })
       .populate("blogs")
       .exec((err, blogs) => {
@@ -294,6 +345,193 @@ userRouter.post(
           },
         });
       });
+  }
+);
+
+// userRouter.post(
+//   "/favorite/:id",
+//   passport.authenticate("jwt", { session: false }),
+//   (req, res) => {
+//     Blog.findById(req.params.id)
+//       .then((blog) => {
+//         if (!blog)
+//           res.status(500).json({
+//             message: {
+//               msgBody: "Không có dữ liệu",
+//               msgError: true,
+//             },
+//           });
+//         const favorite = new Favorite(req.body);
+//         favorite.save((err) => {
+//           if (err) {
+//             return res.status(500).json({
+//               message: {
+//                 msgBody: "Thêm không thành công",
+//                 msgError: true,
+//               },
+//             });
+//           } else {
+//             return res.status(200).json({
+//               message: {
+//                 msgBody: "Thành Công",
+//                 msgError: false,
+//               },
+//             });
+//           }
+//         });
+//         // res.status(200).json({
+//         //   blogs: blog.id,
+//         //   message: {
+//         //     msgBody: "Thành Công",
+//         //     msgError: false,
+//         //   },
+//         // });
+//       })
+//       .catch(() => {
+//         res.status(500).json({
+//           message: {
+//             msgBody: "Không có dữ liệu cần tìm",
+//             msgError: true,
+//           },
+//         });
+//       });
+//   }
+// );
+
+userRouter.post(
+  "/addfavorite",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    let favorite = new Favorite({
+      fovoriteBlog: req.body.fovoriteBlog,
+      _id: req.body.userID,
+    });
+    favorite.save((err, fv) => {
+      if (err) return res.json({ success: false, err });
+      return res.status(200).json({ success: true, fv });
+    });
+  }
+);
+
+userRouter.post(
+  "/favorite/:id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    let variable = { _id: req.params.id };
+    const favorite = new Favorite(variable);
+    favorite.save((err, favoriteResult) => {
+      if (err)
+        return res.json({
+          success: false,
+          err,
+        });
+      else {
+        req.user.favorites.push(favorite);
+        req.user.save((err) => {
+          if (err) {
+            return res.status(500).json({
+              message: {
+                msgBody: "Có Lỗi",
+                msgError: true,
+              },
+            });
+          } else {
+            return res.status(200).json({
+              message: {
+                msgBody: "Thành Công Rồi",
+                msgError: false,
+              },
+            });
+          }
+        });
+        // return res.json({
+        //   success: true,
+        //   favoriteResult,
+        // });
+      }
+    });
+  }
+);
+
+userRouter.get(
+  "/favorite/getfavorite",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    //tim theo id va lay khoa chinh blogs
+
+    Favorite.find()
+      .populate("_id")
+      .exec((err, favorite) => {
+        if (err) {
+          return res.status(500).json({
+            message: {
+              msgBody: "Có lỗi khi lấy dữ liệu",
+              msgError: true,
+            },
+          });
+        } else {
+          return res.status(200).json({
+            message: {
+              msgBody: "Lấy dữ liệu thành công",
+              msgError: false,
+            },
+            favorite,
+          });
+        }
+      });
+  }
+);
+
+userRouter.get(
+  "/user/getfavorite",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    //tim theo id va lay khoa chinh blogs
+
+    User.findById({ _id: req.user._id })
+      .populate("_id")
+      .exec((err, favorites) => {
+        if (err) {
+          return res.status(500).json({
+            message: {
+              msgBody: "Có lỗi khi lấy dữ liệu",
+              msgError: true,
+            },
+          });
+        } else {
+          return res.status(200).json({
+            message: {
+              msgBody: "Lấy dữ liệu thành công của user",
+              msgError: false,
+            },
+            favorites,
+          });
+        }
+      });
+  }
+);
+
+userRouter.get(
+  "/deletefavorite/:id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    Favorite.findByIdAndDelete({ _id: req.params.id }, (err, favorite) => {
+      if (err) {
+        res.status(500).json({
+          message: {
+            msgBody: "Không có dữ liệu cần tìm",
+            msgError: true,
+          },
+        });
+      } else {
+        res.status(200).json({
+          message: {
+            msgBody: "Xoá thành công",
+            msgError: false,
+          },
+        });
+      }
+    });
   }
 );
 

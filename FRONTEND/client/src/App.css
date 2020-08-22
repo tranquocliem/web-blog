@@ -131,9 +131,14 @@
 /* -------------------------------------- */
 
 /* desigh content */
+
 .content img {
-  width: 100%;
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%);
 }
+
 .content {
   color: #b8c3ce;
   text-shadow: 5px 5px 15px #343a40;

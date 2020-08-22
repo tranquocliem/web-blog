@@ -134,7 +134,7 @@ const NavBar = (props) => {
     <nav id="sidebar" className={props.activeNav ? "active" : ""}>
       <NavLink to="/">
         <div className="sidebar-header">
-          <h3>M.E.R.N</h3>
+          <h3>M.E.R.N Stack</h3>
           <strong>F.B</strong>
         </div>
       </NavLink>

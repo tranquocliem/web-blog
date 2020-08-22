@@ -299,6 +299,54 @@ class QuillEditor extends React.Component {
   //upload dưới local
 
   //sử dụng upload ảnh lên cloudinary
+  // insertImage = (e) => {
+  //   e.stopPropagation();
+  //   e.preventDefault();
+
+  //   if (
+  //     e.currentTarget &&
+  //     e.currentTarget.files &&
+  //     e.currentTarget.files.length > 0
+  //   ) {
+  //     const file = e.currentTarget.files[0];
+
+  //     let formData = new FormData();
+  //     const config = {
+  //       header: { "content-type": "multipart/form-data" },
+  //     };
+  //     formData.append("file", file);
+
+  //     axios.post("/blog/up", formData, config).then((response) => {
+  //       if (response.data.success) {
+  //         const quill = this.reactQuillRef.getEditor();
+  //         quill.focus();
+  //         let range = quill.getSelection();
+  //         let position = range ? range.index : 0;
+
+  //         quill.insertEmbed(position, "image", {
+  //           src: response.data.result.url,
+  //           alt: response.data.result.original_filename,
+  //         });
+  //         quill.setSelection(position + 1);
+
+  //         if (this._isMounted) {
+  //           this.setState(
+  //             {
+  //               files: [...this.state.files, file],
+  //             },
+  //             () => {
+  //               this.props.onFilesChange(this.state.files);
+  //             }
+  //           );
+  //         }
+  //       } else {
+  //         return alert("failed to upload file");
+  //       }
+  //     });
+  //   }
+  // };
+  //**************************************/
+
   insertImage = (e) => {
     e.stopPropagation();
     e.preventDefault();
@@ -316,7 +364,8 @@ class QuillEditor extends React.Component {
       };
       formData.append("file", file);
 
-      axios.post("/up", formData, config).then((response) => {
+      axios.post("/blog/image", formData).then((response) => {
+        console.log(response);
         if (response.data.success) {
           const quill = this.reactQuillRef.getEditor();
           quill.focus();
@@ -345,6 +394,7 @@ class QuillEditor extends React.Component {
       });
     }
   };
+
   //sử dụng upload ảnh lên cloudinary
 
   insertVideo = (e) => {
@@ -364,7 +414,7 @@ class QuillEditor extends React.Component {
       };
       formData.append("file", file);
 
-      axios.post("/up", formData, config).then((response) => {
+      axios.post("/blog/uploadfiles", formData, config).then((response) => {
         if (response.data.success) {
           const quill = this.reactQuillRef.getEditor();
           quill.focus();
@@ -373,8 +423,9 @@ class QuillEditor extends React.Component {
           let position = range ? range.index : 0;
           quill.insertEmbed(position, "video", {
             //src: "http://localhost:5000/" + response.data.url,
-            src: response.data.result.url,
-            title: response.data.result.originalfilename,
+            src: response.data.url,
+            //src: response.data.result.url,
+            title: response.data.fileName,
           });
           quill.setSelection(position + 1);
 

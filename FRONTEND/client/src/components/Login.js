@@ -32,7 +32,7 @@ const Login = (props) => {
     <>
       <div className="row mt-5">
         <div className="col-md-6 m-auto">
-          <div className="card card-body" style={{ background: "#7386d5" }}>
+          <div className="card card-body" style={{ background: "#FFF" }}>
             <h1 className="text-center mb-3">
               <i className="fas fa-sign-in-alt" /> Đăng nhập
             </h1>
@@ -66,7 +66,7 @@ const Login = (props) => {
                 Đăng nhập
               </button>
             </form>
-            <p className="lead mt-4" style={{ color: "#fff" }}>
+            <p className="lead mt-4">
               Chư có tài khoản <Link to="/register">Đăng ký</Link>
             </p>
           </div>

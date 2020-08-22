@@ -15,9 +15,11 @@ function DetailBlog(props) {
   useEffect(() => {
     BlogService.getBlogById(postId).then((data) => {
       //console.log(data.writer.username);
-      setDate(data.createdAt);
-      setDateUpdate(data.updatedAt);
-      setPost(data);
+      if (data) {
+        setDate(data.createdAt);
+        setDateUpdate(data.updatedAt);
+        setPost(data);
+      }
     });
   }, [postId]);
 
@@ -32,7 +34,8 @@ function DetailBlog(props) {
   const dUpdate = moment(dateUpdate).format("L");
   const upd = moment(dateUpdate).fromNow();
   const cred = moment(date).fromNow();
-  if (post.writer) {
+  console.log(post);
+  if (post.content) {
     return (
       <div className="container-fluid my-2 p-0">
         <div className="jumbotron mt-2">
@@ -40,31 +43,20 @@ function DetailBlog(props) {
             {post.title}
           </h1>
         </div>
-        <div className="row-fluid d-flex justify-content-center">
+        <div className="row-fluid ">
+          <div className="col">
           <div
-            className="content"
+            className="content "
             dangerouslySetInnerHTML={{ __html: post.content }}
           />
-        </div>
+          </div>
+          </div>
         <div className="row writer mt-5">
           <div className="col">
             <i>
               <p>
-                {/* Người đăng:{" "}
-                {post.writer !== undefined ? post.writer.username : ""}, Ngày
-                đăng: {date.substr(0, 10)}{" "}
-                {date !== dateUpdate
-                  ? `, Ngày Cập Nhật: ${dateUpdate.substr(0, 10)}`
-                  : null} */}
-                {/* {`Người đăng: ${
-                  post.writer !== undefined ? post.writer.username : ""
-                }, Ngày đăng: ${moment(date).format("L")} ${
-                  date !== dateUpdate
-                    ? `Ngày cập nhật: ${moment(dateUpdate).format("L")}`
-                    : null
-                }`} */}
-                Người đăng:{" "}
-                {post.writer !== undefined ? post.writer.username : ""}, Ngày
+                Người đăng:
+                {post.writer !== null ? post.writer.username : "Ẩn danh"}, Ngày
                 đăng: {dCreate}
                 {""}
                 {dCreate === dUpdate ? null : `, Ngày cập nhật: ${dUpdate}`}

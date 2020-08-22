@@ -336,7 +336,7 @@ class QuillEditor extends React.Component {
       };
       formData.append("file", file);
 
-      axios.post("/up", formData, config).then((response) => {
+      axios.post("/blog/image", formData).then((response) => {
         if (response.data.success) {
           const quill = this.reactQuillRef.getEditor();
           quill.focus();
@@ -384,7 +384,7 @@ class QuillEditor extends React.Component {
       };
       formData.append("file", file);
 
-      axios.post("/up", formData, config).then((response) => {
+      axios.post("/blog/uploadfiles", formData, config).then((response) => {
         if (response.data.success) {
           const quill = this.reactQuillRef.getEditor();
           quill.focus();
@@ -393,8 +393,8 @@ class QuillEditor extends React.Component {
           let position = range ? range.index : 0;
           quill.insertEmbed(position, "video", {
             //src: "http://localhost:5000/" + response.data.url,
-            src: response.data.result.url,
-            title: response.data.result.originalfilename,
+            src: response.data.url,
+            title: response.data.fileName,
           });
           quill.setSelection(position + 1);
 

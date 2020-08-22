@@ -35,7 +35,7 @@ function CreateBlog(props) {
     AuthService.isAuthenticated().then((data) => {
       const { user } = data;
       setUser(user);
-      //console.log(user);
+      console.log(user);
     });
   }, []);
 

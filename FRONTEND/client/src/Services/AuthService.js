@@ -23,7 +23,7 @@ export default {
               isAuthenticated: false,
               user: { username: "", role: "" },
               message: {
-                msgBody: "Đăng nhập không thành công!!!",
+                msgBody: "Sai Tài Khoản Hoặc Mật Khẩu",
                 msgError: true,
               },
             };

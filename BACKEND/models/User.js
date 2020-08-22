@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
+const Blog = require("./Blog");
 
 const UserSchema = new mongoose.Schema({
   username: {
@@ -18,9 +19,12 @@ const UserSchema = new mongoose.Schema({
     enum: ["user", "admin"], //vai tro phai dc chon trc va khong the muon nhap gi nhap nen dung enum chi chon dc cac gia tri trong nay
     required: true,
   },
+  //_id: [{ type: mongoose.Schema.Types.ObjectId, ref: "Favorite" }],
   //luu todos vao nguoi dung
   //todos: [{ type: mongoose.Schema.Types.ObjectId, ref: "Todo" }],
-  blogs: [{ type: mongoose.Schema.Types.ObjectId, ref: "Blog"}],
+  //luu blog vao nguoi dung
+  blogs: [{ type: mongoose.Schema.Types.ObjectId, ref: "Blog" }],
+  // _id: [{ type: mongoose.Schema.Types.ObjectId, ref: "Favorite" }],
 });
 
 //chung ta phai ma hoa mat khau truoc luc luu vao CSDL

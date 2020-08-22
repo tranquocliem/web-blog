@@ -320,10 +320,12 @@ userRouter.get(
   "/authenticated",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    //const { username, role } = req.user;
-    const user = req.user;
-    // res.status(200).json({ isAuthenticated: true, user: { username, role } });
-    res.status(200).json({ isAuthenticated: true, user});
+    const { _id, username, role } = req.user;
+    //const user = req.user;
+    res
+      .status(200)
+      .json({ isAuthenticated: true, user: { _id, username, role } });
+    //res.status(200).json({ isAuthenticated: true, user});
   }
 );
 module.exports = userRouter;

@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 
 const BlogPage = (props) => {
   const [blogs, setBlogs] = useState([]);
-  const [user, setUser] = useState([]);
+  const [user, setUser] = useState([]); //de xac dinh tai khoan nao dang dang nhap
 
   //state phang trang
   const [currentPage, setCurrentPage] = useState(1); //trang hien tai, mac dinh dau tien la trang 1
@@ -58,27 +58,30 @@ const BlogPage = (props) => {
   }, []);
   //lay du lieu
   useEffect(() => {
-    //su dung cho getblog neu la admin (load het)
-    if (user.role === "admin")
-      BlogService.getBlog().then((data) => {
-        const { blogs, message } = data; // const blogs = data.blogs; const message = data.message
-        if (!message.msgError) setBlogs(blogs);
-        // console.log(data);
-        // console.log(blogs);
-        // console.log(message);
-      });
-    //su dung cho getblogbyuser neu la user (chi load cac blog cua user do)
-    else {
-      BlogService.getBlogByUser().then((data) => {
-        const { blogs, username } = data.blogs;
-        const { message } = data;
-        if (!message.msgError) setBlogs(blogs);
-        setUserName(username);
-      });
+    function getData() {
+      //su dung cho getblog neu la admin (load het)
+      if (user.role === "admin")
+        BlogService.getBlog().then((data) => {
+          const { blogs, message } = data; // const blogs = data.blogs; const message = data.message
+          if (!message.msgError) setBlogs(blogs);
+          // console.log(data);
+          // console.log(blogs);
+          // console.log(message);
+        });
+      //su dung cho getblogbyuser neu la user (chi load cac blog cua user do)
+      else {
+        BlogService.getBlogByUser().then((data) => {
+          const { blogs, username } = data.blogs;
+          const { message } = data;
+          if (!message.msgError) setBlogs(blogs);
+          setUserName(username);
+        });
+      }
     }
-  }, [blogs]);
-
+    getData();
+  }, [user]);
   //ham phan trang
+  console.log(blogs);
 
   //cap nhat classname khi trang hien tai thay doi
   useEffect(() => {
