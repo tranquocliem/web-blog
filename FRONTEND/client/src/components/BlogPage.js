@@ -8,6 +8,11 @@ import { Link } from "react-router-dom";
 const BlogPage = (props) => {
   const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState([]); //de xac dinh tai khoan nao dang dang nhap
+  const [filter, setFilter] = useState("");
+
+  const onChangeFilter = (e) => {
+    setFilter(e.target.value);
+  };
 
   //state phang trang
   const [currentPage, setCurrentPage] = useState(1); //trang hien tai, mac dinh dau tien la trang 1
@@ -16,7 +21,7 @@ const BlogPage = (props) => {
   const [lowerPageBound, setLowerPageBound] = useState(0); // so trang hien thi toi thieu tren thanh chuyen trang, mac dinh la 0
   const [isPrevBtnActive, setIsPrevBtnActive] = useState("disabled"); // dung de cap nhat trang thai cho nut prev, mac dinh la disable
   const [isNextBtnActive, setIsNextBtnActive] = useState(""); // dung de cap nhat trang thai cho nut next
-  const [pageBound, setPageBound] = useState(2); // rang buoc trang (luon nho hon so luong du lieu hien thi)
+  const [pageBound, setPageBound] = useState(3); // rang buoc trang (luon nho hon so luong du lieu hien thi)
 
   // currentPage: 1,
   // blogsPerPage: 6,
@@ -58,31 +63,30 @@ const BlogPage = (props) => {
   }, []);
   //lay du lieu
   useEffect(() => {
-    function getData() {
-      //su dung cho getblog neu la admin (load het)
-      if (user.role === "admin")
-        BlogService.getBlog().then((data) => {
-          const { blogs, message } = data; // const blogs = data.blogs; const message = data.message
-          if (!message.msgError) setBlogs(blogs);
-          // console.log(data);
-          // console.log(blogs);
-          // console.log(message);
-        });
-      //su dung cho getblogbyuser neu la user (chi load cac blog cua user do)
-      else {
-        BlogService.getBlogByUser().then((data) => {
-          const { blogs, username } = data.blogs;
-          const { message } = data;
-          if (!message.msgError) setBlogs(blogs);
-          setUserName(username);
-        });
-      }
+    if (user.role === "admin")
+      BlogService.getBlog().then((data) => {
+        const { blogs, message } = data; // const blogs = data.blogs; const message = data.message
+        if (!message.msgError) setBlogs(blogs);
+        // console.log(data);
+        // console.log(blogs);
+        // console.log(message);
+      });
+    //su dung cho getblogbyuser neu la user (chi load cac blog cua user do)
+    else {
+      BlogService.getBlogByUser().then((data) => {
+        const { blogs, username } = data.blogs;
+        const { message } = data;
+        if (!message.msgError) setBlogs(blogs);
+        setUserName(username);
+      });
     }
-    getData();
   }, [user]);
-  //ham phan trang
-  console.log(blogs);
 
+  const toTop = () => {
+    window.scrollTo({ top: 420, behavior: "smooth" });
+  };
+
+  //ham phan trang
   //cap nhat classname khi trang hien tai thay doi
   useEffect(() => {
     $("ul li.active").removeClass("active text-primary");
@@ -91,7 +95,7 @@ const BlogPage = (props) => {
 
   //thay doi so trang
   const handleClick = (event) => {
-    window.scrollTo(0, 0); //về đầu trang
+    toTop(); //về đầu trang
     let listid = Number(event.target.id); // so trang vua click
     setCurrentPage(listid); // set lai so trang hien tai cho state currentPage
     $("ul li.active").removeClass("active text-primary"); //xoa
@@ -120,6 +124,7 @@ const BlogPage = (props) => {
   //tang so
   //dung de click vao so
   const btnIncrementClick = () => {
+    toTop();
     setUpperPageBound(upperPageBound + pageBound);
     setLowerPageBound(lowerPageBound + pageBound);
     let listid = upperPageBound + 1;
@@ -130,6 +135,7 @@ const BlogPage = (props) => {
   //giam so
   //dung de click vao so
   const btnDecrementClick = () => {
+    toTop();
     setUpperPageBound(upperPageBound - pageBound);
     setLowerPageBound(lowerPageBound - pageBound);
     let listid = upperPageBound - pageBound;
@@ -140,7 +146,7 @@ const BlogPage = (props) => {
   //giam so trang
   //dung de click vao nut prev
   const btnPrevClick = () => {
-    window.scrollTo(0, 0);
+    toTop();
     //truong hop khong the xay ra
     //vi luc nao trang hien tai cung nho hon pageBound
     if ((currentPage - 1) % pageBound === 0) {
@@ -157,7 +163,7 @@ const BlogPage = (props) => {
   //tang so trang
   //dung de click vao nut next
   const btnNextClick = () => {
-    window.scrollTo(0, 0);
+    toTop();
     if (currentPage + 1 > upperPageBound) {
       setUpperPageBound(upperPageBound + pageBound);
       setLowerPageBound(lowerPageBound + pageBound);
@@ -185,7 +191,31 @@ const BlogPage = (props) => {
   //     />
   //   );
   // });
-  const renderContent = currentblogs.map((blog, index) => {
+
+  const render = filter
+    ? blogs.filter((blog) => {
+        return blog.title.toLowerCase().includes(filter.toLowerCase());
+      })
+    : currentblogs.filter((blog) => {
+        return blog.title.toLowerCase().includes(filter.toLowerCase());
+      });
+
+  const renderContent = render.map((blog, index) => {
+    // if (filter.length !== 0) {
+    //   if (blog.title.toLowerCase().includes(filter.toLowerCase())) {
+    //     return (
+    //       <BlogItem
+    //         key={index}
+    //         blog={blog}
+    //         username={username}
+    //         user={user}
+    //         index={index + 1}
+    //       />
+    //     );
+    //   } else {
+    //     return null;
+    //   }
+    // }
     return (
       <BlogItem
         key={index}
@@ -298,14 +328,6 @@ const BlogPage = (props) => {
 
   if (blogs.length > 0) {
     return (
-      // <div className="container-fluid my-2 p-0">
-      //   <div className="jumbotron mt-2">
-      //     <h1 className="display-3 d-flex justify-content-center">Blog Lists</h1>
-      //   </div>
-      //   <div className="row d-flex justify-content-center">
-      //     <div class="col-10">Hello</div>
-      //   </div>
-      // </div>
       <div className="container-fluid my-2 p-0">
         <div className="jumbotron mt-2">
           <h1 className="display-3 d-flex justify-content-center">
@@ -320,10 +342,17 @@ const BlogPage = (props) => {
             </button>
           </Link>
         </div>
+        <input
+          className="mt-2"
+          type="text"
+          placeholder="lọc dữ liệu"
+          value={filter}
+          onChange={onChangeFilter}
+        />
         <div className="row mt-2 d-flex justify-content-center">
           {renderContent}
         </div>
-        {blogs.length > 3 ? (
+        {blogs.length > 3 && filter === "" ? (
           <div className="row d-flex justify-content-center">
             <ul id="page-numbers" className="pagination justify-content-center">
               {renderPrevBtn}

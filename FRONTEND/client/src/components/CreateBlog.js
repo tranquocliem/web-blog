@@ -17,17 +17,17 @@ function CreateBlog(props) {
     const newTitle = { ...title };
     newTitle[e.target.name] = e.target.value;
     setTitle(newTitle);
-    console.log(title);
+    //console.log(title);
   };
 
   const onEditorChange = (value) => {
     setContent(value);
-    console.log(content);
+    //console.log(content);
   };
 
   const onFilesChange = (files) => {
     setFiles(files);
-    console.log(files);
+    //console.log(files);
   };
 
   //lay duoc cac thong tin tai khoan dang dang nhap va luu vao state user
@@ -35,7 +35,7 @@ function CreateBlog(props) {
     AuthService.isAuthenticated().then((data) => {
       const { user } = data;
       setUser(user);
-      console.log(user);
+      //console.log(user);
     });
   }, []);
 
@@ -80,7 +80,7 @@ function CreateBlog(props) {
       if (data && !message.msgError) {
         setMessage(message);
         resetForm();
-        console.log(data);
+        //console.log(data);
         setTimeout(() => {
           props.history.push("/blogs");
         }, 1500);
@@ -88,14 +88,14 @@ function CreateBlog(props) {
         setMessage(message);
         authContext.setUser({ username: "", role: "" });
         authContext.setIsAuthenticated(false);
-        console.log(data);
+        //console.log(data);
       } else {
         setMessage(message);
-        console.log(data);
+        //console.log(data);
       }
     });
   };
-  console.log(content);
+  //console.log(content);
   return (
     <div className="container-fluid my-2 p-0">
       <div className="jumbotron mt-2">

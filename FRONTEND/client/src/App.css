@@ -77,7 +77,7 @@
 }
 
 .card-body a {
-  color: #51575d !important;
+  color: #6a80968e !important;
 }
 
 .card-body a:hover {
@@ -132,17 +132,52 @@
 
 /* desigh content */
 
-.content img {
+.content img,
+video {
   position: relative;
   top: 50%;
   left: 50%;
   transform: translate(-50%);
 }
 
+/* .ql-align-center{
+  width: 50%;
+  position: relative;
+  top: 50%;
+  left: 55%;
+  transform: translate(-50%);
+} */
+
+.content .ql-align-center {
+  text-align: center !important;
+}
+
+.content a {
+  color: #6d7c8a91 !important;
+}
+
+.content a:hover {
+  color: #007bff !important;
+  border-bottom: 1px solid #007bff;
+}
+
 .content {
   color: #b8c3ce;
   text-shadow: 5px 5px 15px #343a40;
 }
+
+.content img {
+  cursor: zoom-in;
+  transition: 0.5s;
+}
+
+.container-fluid .content img:hover {
+  width: 80%;
+  -webkit-box-shadow: 0 7px 4px #343a40;
+  -moz-box-shadow: 0 7px 4px #343a40;
+  box-shadow: 0 7px 4px #343a40;
+}
+
 .writer {
   color: #b8c3ce;
   /* text-shadow: 5px 5px 15px #343a40; */
@@ -211,3 +246,71 @@ pre.ql-syntax {
 /* .content-img pre.ql-syntax{
   overflow: visible;
 } */
+
+.ql-snow .ql-picker.ql-font,
+.ql-bubble .ql-picker.ql-font {
+  width: 130px;
+}
+/* Set dropdown font-families */
+.ql-font span[data-value="impact"]::before,
+.ql-font span[data-label="Impact"]::before {
+  font-family: "Impact";
+}
+.ql-font span[data-value="courier"]::before,
+.ql-font span[data-label="Courier"]::before {
+  font-family: "Courier";
+}
+.ql-font span[data-value="comic"]::before,
+.ql-font span[data-label="Comic Sans MS"]::before {
+  font-family: "Comic Sans MS";
+}
+
+.ql-font-impact {
+  font-family: "Impact";
+}
+.ql-font-courier {
+  font-family: "Courier";
+}
+.ql-font-comic {
+  font-family: "Comic Sans MS";
+}
+
+/* related-news */
+
+.related-news ul li a {
+  color: #b8c3ce !important;
+}
+
+.related-news ul li a:hover {
+  color: #007bff !important;
+  border-bottom: 1px solid #007bff;
+  width: fit-content;
+}
+
+/* Scroll To Top */
+
+.scroll-to-top {
+  position: fixed;
+  bottom: 12px;
+  left: 50%;
+  width: 40px;
+  height: 40px;
+  border-radius: 100%;
+  background: #8b0000;
+  color: #fff;
+  z-index: 1;
+}
+.scroll-to-top .icon {
+  margin-top: 10px;
+  animation: scrollTop 0.5s alternate ease infinite;
+}
+@keyframes scrollTop {
+  from {
+    transform: translateY(2px);
+  }
+  to {
+    transform: translateY(-1px);
+  }
+}
+
+/* Filter Box */

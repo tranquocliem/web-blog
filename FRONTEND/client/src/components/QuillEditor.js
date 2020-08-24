@@ -359,9 +359,9 @@ class QuillEditor extends React.Component {
       const file = e.currentTarget.files[0];
 
       let formData = new FormData();
-      const config = {
-        header: { "content-type": "multipart/form-data" },
-      };
+      // const config = {
+      //   header: { "content-type": "multipart/form-data" },
+      // };
       formData.append("file", file);
 
       axios.post("/blog/image", formData).then((response) => {
@@ -464,7 +464,7 @@ class QuillEditor extends React.Component {
       };
       formData.append("file", file);
 
-      axios.post("/up", formData, config).then((response) => {
+      axios.post("/blog/uploadfiles", formData, config).then((response) => {
         if (response.data.success) {
           const quill = this.reactQuillRef.getEditor();
           quill.focus();
@@ -505,12 +505,45 @@ class QuillEditor extends React.Component {
             <option value="1" />
             <option value="2" />
             <option value="3" />
+            <option value="4" />
+            <option value="5" />
+            <option value="6" />
             <option value="" />
           </select>
           <button className="ql-bold" />
           <button className="ql-italic" />
           <button className="ql-underline" />
           <button className="ql-strike" />
+          <button type="button" className="ql-align" value="">
+            <svg viewBox="0 0 18 18">
+              <line className="ql-stroke" x1="3" x2="15" y1="9" y2="9"></line>
+              <line className="ql-stroke" x1="3" x2="13" y1="14" y2="14"></line>
+              <line className="ql-stroke" x1="3" x2="9" y1="4" y2="4"></line>
+            </svg>
+          </button>
+          <button type="button" className="ql-align" value="center">
+            <svg viewBox="0 0 18 18">
+              <line className="ql-stroke" x1="15" x2="3" y1="9" y2="9"></line>
+              <line className="ql-stroke" x1="14" x2="4" y1="14" y2="14"></line>
+              <line className="ql-stroke" x1="12" x2="6" y1="4" y2="4"></line>
+            </svg>
+          </button>
+          <button type="button" className="ql-align" value="right">
+            <svg viewBox="0 0 18 18">
+              <line className="ql-stroke" x1="15" x2="3" y1="9" y2="9"></line>
+              <line className="ql-stroke" x1="15" x2="5" y1="14" y2="14"></line>
+              <line className="ql-stroke" x1="15" x2="9" y1="4" y2="4"></line>
+            </svg>
+          </button>
+          <button type="button" className="ql-align" value="justify">
+            <svg viewBox="0 0 18 18">
+              <line className="ql-stroke" x1="15" x2="3" y1="9" y2="9"></line>
+              <line className="ql-stroke" x1="15" x2="3" y1="14" y2="14"></line>
+              <line className="ql-stroke" x1="15" x2="3" y1="4" y2="4"></line>
+            </svg>
+          </button>
+          <button className="ql-list" value="ordered"></button>
+          <button className="ql-list" value="bullet"></button>
           <button className="ql-insertImage" title="My Image">
             I
           </button>
@@ -520,6 +553,24 @@ class QuillEditor extends React.Component {
           <button className="ql-insertFile" title="My File">
             F
           </button>
+          <select className="ql-color">
+            <option value="rgb(0, 0, 0)" />
+            <option value="rgb(230, 0, 0)" />
+            <option value="rgb(255, 153, 0)" />
+            <option value="rgb(255, 255, 0)" />
+            <option value="rgb(0, 138, 0)" />
+            <option value="rgb(0, 102, 204)" />
+            <option value="rgb(153, 51, 255)" />
+            <option value="rgb(255, 255, 255)" />
+            <option value="rgb(250, 204, 204)" />
+            <option value="rgb(255, 235, 204)" />
+            <option value="rgb(204, 224, 245)" />
+            <option value="rgb(235, 214, 255)" />
+            <option value="rgb(187, 187, 187)" />
+            <option value="rgb(102, 185, 102)" />
+          </select>
+          <button className="ql-script" value="sub"></button>
+          <button className="ql-script" value="super"></button>
           <button className="ql-link" />
           <button className="ql-code-block" />
           <button className="ql-video" />
@@ -594,6 +645,10 @@ class QuillEditor extends React.Component {
     "video",
     "blockquote",
     "clean",
+    "color",
+    "align",
+    "script",
+    "list",
   ];
 }
 

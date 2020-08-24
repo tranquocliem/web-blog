@@ -54,7 +54,7 @@ function BlogItem(props) {
   };
 
   const toTop = () => {
-    window.scrollTo(0, 0);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   return (
@@ -92,15 +92,13 @@ function BlogItem(props) {
                 : props.username}
             </p> */}
             <p>
-              {
-              props.user.role === "admin"
+              {props.user.role === "admin"
                 ? props.blog.writer !== null
                   ? props.blog.writer.username
                   : "Ẩn danh"
                 : props.username !== null
-                  ? props.username
-                  : "Ẩn danh"
-              }
+                ? props.username
+                : "Ẩn danh"}
             </p>
             <br />
             <div dangerouslySetInnerHTML={{ __html: props.blog.content }} />

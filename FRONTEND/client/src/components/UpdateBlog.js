@@ -40,13 +40,13 @@ function UpdateBlog(props) {
   };
 
   useEffect(() => {
-    console.log(props.match.params.id);
+    //console.log(props.match.params.id);
     BlogService.getBlogById(props.match.params.id).then((data) => {
       const { content, title } = data;
-      console.log(data);
+      //console.log(data);
       setContent(content);
       setTitle(title);
-      console.log(title);
+      //console.log(title);
     });
   }, [props.match.params.id]);
 
@@ -60,7 +60,7 @@ function UpdateBlog(props) {
 
   const onEditorChange = (value) => {
     setContent(value);
-    console.log(content);
+    //console.log(content);
   };
 
   const onSubmit = (e) => {
@@ -80,7 +80,7 @@ function UpdateBlog(props) {
   };
 
   const sendContent = content;
-  console.log(sendContent);
+  //console.log(sendContent);
   return (
     <div className="container-fluid my-2 p-0">
       <div className="jumbotron mt-2">

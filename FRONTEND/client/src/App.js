@@ -6,6 +6,7 @@ import NavBar from "./components/NavBar";
 import DuongDanURL from "./components/DuongDanURL";
 import TonggleSider from "./components/ToggleSideBar";
 import Footer from "./components/Footer";
+import ScrollToTop from "./components/ScrollToTop";
 
 // class App extends Component {
 //   render() {
@@ -44,6 +45,7 @@ function App(props) {
           <DuongDanURL />
         </div>
       </div>
+      <ScrollToTop />
       <Footer />
     </HashRouter>
   );
