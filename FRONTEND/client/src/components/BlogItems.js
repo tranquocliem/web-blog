@@ -105,7 +105,7 @@ function BlogItem(props) {
           </div>
           <div className="control-blogitem mt-2 py-1">
             <div className="row d-flex justify-content-center mt-1">
-              <Link to={"/update/" + props.blog._id}>
+              <Link to={"/update/" + props.blog._id} onClick={toTop}>
                 <i className="fas fa-cog update px-3"></i>
               </Link>
               <Link

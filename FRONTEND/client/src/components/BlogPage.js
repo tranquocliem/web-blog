@@ -4,11 +4,13 @@ import AuthService from "../Services/AuthService";
 import BlogItem from "./BlogItems";
 import $ from "jquery";
 import { Link } from "react-router-dom";
+import Pagination from "./Pagination";
 
 const BlogPage = (props) => {
   const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState([]); //de xac dinh tai khoan nao dang dang nhap
   const [filter, setFilter] = useState("");
+  const [findPage, setFindPage] = useState("1");
 
   const onChangeFilter = (e) => {
     setFilter(e.target.value);
@@ -21,6 +23,8 @@ const BlogPage = (props) => {
   const [lowerPageBound, setLowerPageBound] = useState(0); // so trang hien thi toi thieu tren thanh chuyen trang, mac dinh la 0
   const [isPrevBtnActive, setIsPrevBtnActive] = useState("disabled"); // dung de cap nhat trang thai cho nut prev, mac dinh la disable
   const [isNextBtnActive, setIsNextBtnActive] = useState(""); // dung de cap nhat trang thai cho nut next
+  const [isLastBtnActive, setIsLastBtnActive] = useState(""); // dung de cap nhat trang thai cho nut next
+  const [isFirstBtnActive, setIsFirstBtnActive] = useState("disabled"); // dung de cap nhat trang thai cho nut next
   const [pageBound, setPageBound] = useState(3); // rang buoc trang (luon nho hon so luong du lieu hien thi)
 
   // currentPage: 1,
@@ -40,26 +44,6 @@ const BlogPage = (props) => {
       const { user } = data;
       setUser(user);
     }, []);
-    //su dung cho getblog
-    //BlogService.getBlog().then((data) => {
-    //const { blogs, message } = data; // const blogs = data.blogs; const message = data.message
-    // if (!message.msgError) setBlogs(blogs);
-    // console.log(data);
-    // console.log(blogs);
-    // console.log(message);
-    //});
-
-    //su dung cho getblogbyuser
-    // BlogService.getBlogByUser().then((data) => {
-    //   const { blogs, username } = data.blogs;
-    //   const { message } = data;
-    //   if (!message.msgError) setBlogs(blogs);
-    //   setUserName(username);
-    // console.log(data);
-    // console.log(blogs);
-    // console.log(message);
-    // console.log(username);
-    //});
   }, []);
   //lay du lieu
   useEffect(() => {
@@ -83,21 +67,18 @@ const BlogPage = (props) => {
   }, [user]);
 
   const toTop = () => {
-    window.scrollTo({ top: 420, behavior: "smooth" });
+    window.scrollTo({ top: 500, behavior: "smooth" });
   };
 
   //ham phan trang
-  //cap nhat classname khi trang hien tai thay doi
-  useEffect(() => {
-    $("ul li.active").removeClass("active text-primary");
-    $("ul li#" + currentPage).addClass("active text-primary");
-  }, [currentPage]);
 
   //thay doi so trang
+  //bam vao so
   const handleClick = (event) => {
     toTop(); //về đầu trang
     let listid = Number(event.target.id); // so trang vua click
     setCurrentPage(listid); // set lai so trang hien tai cho state currentPage
+    setFindPage(listid);
     $("ul li.active").removeClass("active text-primary"); //xoa
     $("ul li#" + listid).addClass("active text-primary"); //cap nhat lai
     setPrevAndNextBtnClass(listid); // cap nhat trang thai prev va next khi dang o trang vua click
@@ -110,14 +91,20 @@ const BlogPage = (props) => {
     let totalPage = Math.ceil(blogs.length / blogsPerPage); // ceil lam tron len
     setIsNextBtnActive("disabled");
     setIsPrevBtnActive("disabled");
+    setIsLastBtnActive("disabled");
+    setIsFirstBtnActive("disabled");
     if (totalPage === listid && totalPage > 1) {
       setIsPrevBtnActive(""); // neu tong trang === so trang dang hien thi tong so trang > 1 thi prev dc bat
+      setIsFirstBtnActive("");
     } else if (listid === 1 && totalPage > 1) {
       setIsNextBtnActive(""); // neu so trang dang hien === 1 (trang dau tien) va tong so trang > 1 thi nut next dc bat
+      setIsLastBtnActive("");
     } else if (totalPage > 1) {
       //con neu khong xac dinh tong so trang = may va trang hien tai la bao nhieu ma chi biet tong so trang > 1 prev next deu bat
       setIsPrevBtnActive("");
+      setIsLastBtnActive("");
       setIsNextBtnActive("");
+      setIsFirstBtnActive("");
     }
   };
 
@@ -129,6 +116,7 @@ const BlogPage = (props) => {
     setLowerPageBound(lowerPageBound + pageBound);
     let listid = upperPageBound + 1;
     setCurrentPage(listid);
+    setFindPage(listid);
     setPrevAndNextBtnClass(listid);
   };
 
@@ -140,6 +128,7 @@ const BlogPage = (props) => {
     setLowerPageBound(lowerPageBound - pageBound);
     let listid = upperPageBound - pageBound;
     setCurrentPage(listid);
+    setFindPage(listid);
     setPrevAndNextBtnClass(listid);
   };
 
@@ -157,6 +146,7 @@ const BlogPage = (props) => {
     //truong hop xay ra
     let listid = currentPage - 1; //trang hien tai tru 1
     setCurrentPage(listid); // set lai state currentPage
+    setFindPage(listid);
     setPrevAndNextBtnClass(listid); // cap nhat lai cac nut
   };
 
@@ -170,27 +160,37 @@ const BlogPage = (props) => {
     }
     let listid = currentPage + 1;
     setCurrentPage(listid);
+    setFindPage(listid);
     setPrevAndNextBtnClass(listid);
+  };
+
+  //trang cuoi
+  const btnLastClick = () => {
+    toTop();
+    let listid = Math.ceil(blogs.length / blogsPerPage);
+    setCurrentPage(listid);
+    setFindPage(listid);
+    setIsNextBtnActive("disabled");
+    setIsLastBtnActive("disabled");
+    setIsPrevBtnActive("");
+    setIsFirstBtnActive("");
+  };
+
+  const btnFirstClick = () => {
+    toTop();
+    let listid = 1;
+    setCurrentPage(listid);
+    setFindPage(listid);
+    setIsNextBtnActive("");
+    setIsPrevBtnActive("disabled");
+    setIsLastBtnActive("");
+    setIsFirstBtnActive("disabled");
   };
 
   // Logic for displaying current blogs
   const indexOfLastNew = currentPage * blogsPerPage; //vd dang o trang 1  = 3
   const indexOfFirstNew = indexOfLastNew - blogsPerPage; // 3 - 3 = 0
   const currentblogs = blogs.slice(indexOfFirstNew, indexOfLastNew); // lay trong khoang tu 0 -> 3
-
-  //console.log(user);
-  //console.log(blogs);
-  // const renderContent = blogs.map((blog, index) => {
-  //   return (
-  //     <BlogItem
-  //       key={index}
-  //       blog={blog}
-  //       username={username}
-  //       user={user}
-  //       index={index + 1}
-  //     />
-  //   );
-  // });
 
   const render = filter
     ? blogs.filter((blog) => {
@@ -201,21 +201,6 @@ const BlogPage = (props) => {
       });
 
   const renderContent = render.map((blog, index) => {
-    // if (filter.length !== 0) {
-    //   if (blog.title.toLowerCase().includes(filter.toLowerCase())) {
-    //     return (
-    //       <BlogItem
-    //         key={index}
-    //         blog={blog}
-    //         username={username}
-    //         user={user}
-    //         index={index + 1}
-    //       />
-    //     );
-    //   } else {
-    //     return null;
-    //   }
-    // }
     return (
       <BlogItem
         key={index}
@@ -227,106 +212,69 @@ const BlogPage = (props) => {
     );
   });
 
-  // Logic for displaying page numbers
-  const pageNumbers = [];
-  for (let i = 1; i <= Math.ceil(blogs.length / blogsPerPage); i++) {
-    pageNumbers.push(i);
-  }
+  let totalPage = Math.ceil(blogs.length / blogsPerPage); //tong trang ceil lam tron len
 
-  const renderPageNumbers = pageNumbers.map((number, index) => {
-    if (number === 1 && currentPage === 1) {
-      return (
-        <li
-          key={index}
-          className="active text-primary numberpage"
-          id={number}
-          onClick={handleClick}
-        >
-          <div className="" id={number}>
-            {number}
-          </div>
-        </li>
-      );
-    } else if (number < upperPageBound + 1 && number > lowerPageBound) {
-      return (
-        <li
-          key={index}
-          id={number}
-          className="active numberpage"
-          onClick={handleClick}
-        >
-          <div id={number} className="">
-            {number}
-          </div>
-        </li>
-      );
+  const handlePage = (event) => {
+    const listid = event.target.value;
+    setFindPage(listid);
+    //setCurrentPage(listid);
+    //setPrevAndNextBtnClass(listid);
+  };
+
+  const handleKeyPress = (event) => {
+    const re = /^[0-9\b]+$/;
+    //const page = event.target.value;
+    //kiem tra khi nhan phim enter se thuc hien yeu cau
+    if (event.key === "Enter") {
+      //kiem tra co phai la so ko
+      if (re.test(findPage) && findPage <= totalPage) {
+        setCurrentPage(findPage);
+        setPrevAndNextBtnClass(findPage);
+        toTop();
+      } else if (!findPage || findPage > totalPage) {
+        alert("khong co trang nay");
+      } else {
+        alert("chi nhap so");
+      }
     }
-    return <div key={index}></div>;
-  });
+  };
 
-  let pageIncrementBtn = null;
-  if (pageNumbers.length > upperPageBound) {
-    pageIncrementBtn = (
-      <li className="text-primary page-link dots" onClick={btnIncrementClick}>
-        {/* <div onClick={btnIncrementClick}> &hellip; </div> */}
-        &hellip;
-      </li>
-    );
-  }
-
-  let pageDecrementBtn = null;
-  if (lowerPageBound >= 1) {
-    pageDecrementBtn = (
-      <li className="text-primary page-link dots" onClick={btnDecrementClick}>
-        {/* <div onClick={btnDecrementClick}> &hellip; </div> */}
-        &hellip;
-      </li>
-    );
-  }
-
-  let renderPrevBtn = null;
-  if (isPrevBtnActive === "disabled") {
-    renderPrevBtn = (
-      <li className={isPrevBtnActive ? "page-item" : ""}>
-        <span className="text-secondary page-link" id="btnPrev">
-          {" "}
-          Prev{" "}
-        </span>
-      </li>
-    );
-  } else {
-    renderPrevBtn = (
-      <li className={isPrevBtnActive ? "page-item" : ""} onClick={btnPrevClick}>
-        <div className="text-primary page-link" id="btnPrev">
-          {" "}
-          Prev{" "}
+  const renderFindPage = () => {
+    return (
+      <div
+        className="row"
+        style={{
+          color: "#b8c3ce",
+          fontSize: "26px",
+          fontWeight: "bold",
+          textAlign: "right",
+        }}
+      >
+        <div className="col">
+          {"Trang "}
+          <input
+            type="text"
+            onKeyPress={handleKeyPress}
+            onChange={handlePage}
+            value={findPage}
+            style={{
+              fontSize: "22px",
+              fontWeight: "bold",
+              width: "33px",
+              height: "23px",
+              textAlign: "right",
+              color: "#b8c3ce",
+              background: "#343a40",
+              outline: "none",
+            }}
+          ></input>
+          {totalPage === 0 ? " /?" : ` /${totalPage}`}
         </div>
-      </li>
+      </div>
     );
-  }
+  };
 
-  let renderNextBtn = null;
-  if (isNextBtnActive === "disabled") {
-    renderNextBtn = (
-      <li className={isNextBtnActive ? "page-item" : ""}>
-        <span id="btnNext" className="text-secondary page-link">
-          {" "}
-          Next{" "}
-        </span>
-      </li>
-    );
-  } else {
-    renderNextBtn = (
-      <li className={isNextBtnActive ? "page-item" : ""} onClick={btnNextClick}>
-        <div className="text-primary page-link" id="btnNext">
-          {" "}
-          Next{" "}
-        </div>
-      </li>
-    );
-  }
-
-  if (blogs.length > 0) {
+  if (blogs.length > 0 && renderContent.length > 0) {
     return (
       <div className="container-fluid my-2 p-0">
         <div className="jumbotron mt-2">
@@ -334,34 +282,58 @@ const BlogPage = (props) => {
             Blog Lists
           </h1>
         </div>
-        <div className="editor-blog">
-          <Link to="/blog/create">
-            <button type="button" className="btn btn-primary">
-              <i className="fas fa-newspaper mx-2"></i>
-              Biên Tập
-            </button>
-          </Link>
+        <div className="row">
+          <div className="col">
+            <div className="editor-blog">
+              <Link to="/blog/create">
+                <button type="button" className="btn btn-primary">
+                  <i className="fas fa-newspaper mx-2"></i>
+                  Biên Tập
+                </button>
+              </Link>
+            </div>
+          </div>
         </div>
-        <input
-          className="mt-2"
-          type="text"
-          placeholder="lọc dữ liệu"
-          value={filter}
-          onChange={onChangeFilter}
-        />
+        <div className="row">
+          <div className="col">
+            <input
+              className="mt-2"
+              type="text"
+              placeholder="lọc dữ liệu"
+              value={filter}
+              onChange={onChangeFilter}
+            />
+          </div>
+        </div>
+
+        {/* <div
+          style={{ fontSize: "25px", fontWeight: "bold", color: "#b8c3ce" }}
+        >{`Trang ${currentPage}/${totalPage}`}</div>
+        <input type="text" onKeyPress={handleKeyPress}></input> */}
+        <hr />
+        {filter === "" ? renderFindPage() : null}
         <div className="row mt-2 d-flex justify-content-center">
           {renderContent}
         </div>
         {blogs.length > 3 && filter === "" ? (
-          <div className="row d-flex justify-content-center">
-            <ul id="page-numbers" className="pagination justify-content-center">
-              {renderPrevBtn}
-              {pageDecrementBtn}
-              {renderPageNumbers}
-              {pageIncrementBtn}
-              {renderNextBtn}
-            </ul>
-          </div>
+          <Pagination
+            blogs={blogs}
+            currentPage={currentPage}
+            blogsPerPage={blogsPerPage}
+            upperPageBound={upperPageBound}
+            lowerPageBound={lowerPageBound}
+            isPrevBtnActive={isPrevBtnActive}
+            isNextBtnActive={isNextBtnActive}
+            isLastBtnActive={isLastBtnActive}
+            isFirstBtnActive={isFirstBtnActive}
+            handleClick={handleClick}
+            btnIncrementClick={btnIncrementClick}
+            btnDecrementClick={btnDecrementClick}
+            btnPrevClick={btnPrevClick}
+            btnNextClick={btnNextClick}
+            btnLastClick={btnLastClick}
+            btnFirstClick={btnFirstClick}
+          />
         ) : null}
       </div>
     );
@@ -373,14 +345,31 @@ const BlogPage = (props) => {
             Blog Lists
           </h1>
         </div>
-        <div className="editor-blog">
-          <Link to="/blog/create">
-            <button type="button" className="btn btn-primary">
-              <i className="fas fa-newspaper mx-2"></i>
-              Biên Tập
-            </button>
-          </Link>
+        <div className="row">
+          <div className="col">
+            <div className="editor-blog">
+              <Link to="/blog/create">
+                <button type="button" className="btn btn-primary">
+                  <i className="fas fa-newspaper mx-2"></i>
+                  Biên Tập
+                </button>
+              </Link>
+            </div>
+          </div>
         </div>
+        <div className="row">
+          <div className="col">
+            <input
+              className="mt-2"
+              type="text"
+              placeholder="lọc dữ liệu"
+              value={filter}
+              onChange={onChangeFilter}
+            />
+          </div>
+        </div>
+
+        {filter === "" ? renderFindPage() : null}
         <div className="row">
           <h1
             className="col-12 d-flex justify-content-center mt-5"
