@@ -83,12 +83,15 @@ function DetailBlog(props) {
             <i>Có thể bạn muốn xem:</i>
           </span>
           {blogs.map((blog, i) => {
-            if (i <= 3) return <RelatedBlog blog={blog} key={i} />;
-            return (
-              <div key={i} style={{ display: "none" }}>
-                Helo
-              </div>
-            );
+            if (blog._id !== postId) {
+              if (i <= 4) return <RelatedBlog blog={blog} key={i} />;
+              return (
+                <div key={i} style={{ display: "none" }}>
+                  Helo
+                </div>
+              );
+            }
+            return "";
           })}
         </div>
       </div>

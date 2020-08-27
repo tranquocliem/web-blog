@@ -131,7 +131,7 @@ const NavBar = (props) => {
   };
 
   return (
-    <nav id="sidebar" className={props.activeNav ? "active" : ""}>
+    <nav id="sidebar" className={"no-select" + (props.activeNav ? " active" : "")}>
       <NavLink to="/">
         <div className="sidebar-header">
           <h3>M.E.R.N Stack</h3>
