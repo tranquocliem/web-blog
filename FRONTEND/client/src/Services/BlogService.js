@@ -41,6 +41,7 @@ export default {
         };
       });
   },
+
   getBlogByUser: () => {
     return axios
       .get("/blog/user/getBlogs")
@@ -60,6 +61,27 @@ export default {
         };
       });
   },
+
+  getBlogByIsDisplay: () => {
+    return axios
+      .get("/blog/getControlBlog")
+      .then((res) => {
+        if (res.status !== 400) {
+          return res.data;
+        } else {
+          return { message: { msgBody: "Error" }, msgError: true };
+        }
+      })
+      .catch((err) => {
+        return {
+          message: {
+            msgBody: "Lấy dữ liệu không thành công!!!",
+            msgError: true,
+          },
+        };
+      });
+  },
+
   getBlogById: (id) => {
     return axios.get("/blog/" + id).then((res) => {
       if (res.status !== 400) {

@@ -75,6 +75,7 @@ const userRouter = require("./routers/User");
 app.use("/", userRouter);
 app.use("/blog", require("./routers/Blog"));
 app.use("/uploads", express.static("uploads"));
+app.use("/api/like", require("./routers/Like"));
 
 const PORT = process.env.PORT || 5000;
 

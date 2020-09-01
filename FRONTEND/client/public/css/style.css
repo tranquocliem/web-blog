@@ -272,6 +272,10 @@ a.article:hover {
   }
 }
 
+.fix {
+  background-image: url(../fix.jpg);
+}
+
 .footer {
   position: absolute;
   bottom: 0;

@@ -8,6 +8,7 @@ import { AuthContext } from "../Context/AuthContext";
 function CreateBlog(props) {
   const [content, setContent] = useState("");
   const [title, setTitle] = useState({ title: "" });
+  const [isDisplay, setIsDisplay] = useState(false);
   const [files, setFiles] = useState([]);
   const [message, setMessage] = useState(null);
   const authContext = useContext(AuthContext);
@@ -65,7 +66,7 @@ function CreateBlog(props) {
 
   const onSubmit = (event) => {
     event.preventDefault();
-    window.scrollTo(0, 0);
+    window.scrollTo({ top: 0, behavior: "smooth" });
     const colorRand = getRandomColor();
     const variables = {
       //nhung thu can thiet cua model blog
@@ -73,6 +74,7 @@ function CreateBlog(props) {
       title: title.title,
       color: colorRand,
       writer: user._id,
+      isDisplay: isDisplay,
     };
     BlogService.addBlog(variables).then((data) => {
       const { message } = data;
@@ -96,6 +98,11 @@ function CreateBlog(props) {
     });
   };
   //console.log(content);
+
+  const onHandleDisplay = () => {
+    setIsDisplay(!isDisplay);
+  };
+
   return (
     <div className="container-fluid my-2 p-0">
       <div className="jumbotron mt-2">
@@ -104,6 +111,17 @@ function CreateBlog(props) {
       <div className="row d-flex justify-content-center">
         <div className="col-10">
           {message ? <Message message={message} /> : null}
+          {user.role === "admin" ? (
+            <button
+              type="button"
+              onClick={onHandleDisplay}
+              className={isDisplay ? "btn btn-primary" : "btn btn-secondary"}
+            >
+              {isDisplay ? "Đã Phê Duyệt" : "Chưa Phê Duyệt"}
+            </button>
+          ) : null}
+
+          <br />
           <label
             htmlFor="exampleFormControlInput1"
             className="text-white font-weight-bold mt-3"

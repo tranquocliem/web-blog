@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import TodosService from "../Services/TodosService";
+import React from "react";
 import TodoItems from "./TodoItems";
 import { Link } from "react-router-dom";
 // class Todos extends Component {
@@ -14,15 +13,7 @@ import { Link } from "react-router-dom";
 //   }
 // }
 
-const Todos = () => {
-  const [todos, setTodos] = useState([]);
-
-  useEffect(() => {
-    TodosService.getTodosAll().then((data) => {
-      setTodos(data.todos);
-    });
-  }, [todos]);
-
+const Todos = (props) => {
   return (
     <div className="container-fluid my-2 p-0">
       <div className="jumbotron mt-2">
@@ -47,9 +38,7 @@ const Todos = () => {
               </tr>
             </thead>
             <tbody className="text-center">
-              {todos.map((todo, i) => {
-                return <TodoItems key={i} todo={todo}/>;
-              })}
+              <TodoItems />
             </tbody>
           </table>
         </div>

@@ -12,8 +12,11 @@ const BlogSchema = new mongoose.Schema(
       required: true,
       minlength: 10,
     },
-    color:{
+    color: {
       type: String,
+    },
+    isDisplay: {
+      type: Boolean,
     },
     writer: {
       type: mongoose.Schema.Types.ObjectId,

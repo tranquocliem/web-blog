@@ -14,11 +14,19 @@ import CreateBlog from "./CreateBlog";
 import BlogPage from "./BlogPage";
 import DetailBlog from "./DetailBlog";
 import UpdateBlog from "./UpdateBlog";
+import ControlBlogsPage from "./ControlBlogsPage";
 class DuongDanURL extends Component {
   render() {
+    const hehe = "hehe";
+
     return (
       <Switch>
-        <Route exact path="/" component={Home} />
+        <Route
+          exact
+          path="/"
+          //component={Home}
+          render={(props) => <Home {...this.props} hehe={hehe} />}
+        />
         <UnPrivateRouter path="/login" component={Login} />
         <UnPrivateRouter path="/register" component={Register} />
         <PrivateRouter
@@ -51,6 +59,11 @@ class DuongDanURL extends Component {
           path="/blogs"
           roles={["user", "admin"]}
           component={BlogPage}
+        />
+        <PrivateRouter
+          path="/controlblogs"
+          roles={["admin"]}
+          component={ControlBlogsPage}
         />
         <PrivateRouter
           path="/post/:tieude/:id.html"

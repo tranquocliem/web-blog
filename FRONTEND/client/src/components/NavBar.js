@@ -94,6 +94,15 @@ const NavBar = (props) => {
                 </li>
                 <li>
                   <NavLink
+                    to="/controlblogs"
+                    activeStyle={{ background: "#7f0b16bf" }}
+                  >
+                    <i className="fas fa-calendar-check"></i>
+                    Phê Duyệt Blogs
+                  </NavLink>
+                </li>
+                <li>
+                  <NavLink
                     to="/admin/todos"
                     activeStyle={{ background: "#7f0b16bf" }}
                   >
@@ -131,7 +140,10 @@ const NavBar = (props) => {
   };
 
   return (
-    <nav id="sidebar" className={"no-select" + (props.activeNav ? " active" : "")}>
+    <nav
+      id="sidebar"
+      className={"no-select" + (props.activeNav ? " active" : "")}
+    >
       <NavLink to="/">
         <div className="sidebar-header">
           <h3>M.E.R.N Stack</h3>

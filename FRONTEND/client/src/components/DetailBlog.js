@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import BlogService from "../Services/BlogService";
+import { AuthContext } from "../Context/AuthContext";
 import moment from "moment";
 import "moment/locale/vi";
 import RelatedBlog from "./RelatedBlog";
-
+import fix from "../img/fix.jpg";
+import LikeAndDisLike from "./LikeAndDisLike";
 // import { Container } from './styles';
 
 function DetailBlog(props) {
@@ -12,6 +14,7 @@ function DetailBlog(props) {
   const [blogs, setBlogs] = useState([]);
   const [date, setDate] = useState("");
   const [dateUpdate, setDateUpdate] = useState("");
+  const { user } = useContext(AuthContext);
   const postId = props.match.params.id;
 
   useEffect(() => {
@@ -31,6 +34,7 @@ function DetailBlog(props) {
       if (!message.msgError) return setBlogs(blogs);
     });
   }, []);
+
   //console.log(dateUpdate);
   //console.log(date);
   // const formatDate = () => {
@@ -38,16 +42,23 @@ function DetailBlog(props) {
   // };
   // console.log(formatDate);
   //console.log(post.updatedAt);
+
+  //date
   const dCreate = moment(date).format("L");
   const dUpdate = moment(dateUpdate).format("L");
   const upd = moment(dateUpdate).fromNow();
   const cred = moment(date).fromNow();
   //console.log(post);
-  if (post.content) {
+  //console.log(user);
+
+  if (post.content && post.isDisplay) {
     return (
       <div className="container-fluid my-2 p-0">
         <div className="jumbotron mt-2">
-          <h1 className="display-3 d-flex justify-content-center">
+          <h1
+            className="display-3 d-flex justify-content-center"
+            style={{ textAlign: "center" }}
+          >
             {post.title}
           </h1>
         </div>
@@ -75,6 +86,7 @@ function DetailBlog(props) {
             </i>
           </div>
         </div>
+        <LikeAndDisLike postId={postId} userId={user._id} />
         <hr />
         <div className="row-fluid related-news">
           <span
@@ -96,6 +108,39 @@ function DetailBlog(props) {
         </div>
       </div>
     );
+  } else if (post.content && !post.isDisplay) {
+    return (
+      <div className="container-fluid my-2 p-0">
+        <div className="row d-flex justify-content-center">
+          <img className="mt-5" style={{ width: "40%" }} src={fix} alt="Fix" />
+        </div>
+        <div className="row d-flex justify-content-center">
+          <div
+            style={{
+              textAlign: "center",
+              fontWeight: "bold",
+              fontSize: "27px",
+              color: "#6c757d",
+              textShadow: "1px 1px 5px #6c757d",
+            }}
+            className="mt-4"
+          >
+            Đang Trỉnh Sửa Quay Lại Sao Nhé!!!
+          </div>
+        </div>
+        <div className="row d-flex justify-content-center mt-2">
+          <button
+            type="button"
+            className="btn btn-primary mt-3"
+            onClick={() => {
+              window.location.reload(true);
+            }}
+          >
+            Reload Thử Cái Nè
+          </button>
+        </div>
+      </div>
+    );
   } else {
     return (
       <div className="container-fluid my-2 p-0">
@@ -107,7 +152,7 @@ function DetailBlog(props) {
               color: "#6c757d",
               textShadow: "1px 1px 5px #6c757d",
             }}
-            className="pt-5 mt-5"
+            className="pt-5"
           >
             Loading...
           </div>

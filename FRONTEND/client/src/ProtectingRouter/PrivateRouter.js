@@ -31,8 +31,8 @@ const PrivateRouter = ({ component: Component, roles, ...rest }) => {
           return (
             <Redirect to={{ pathname: "/", state: { from: props.location } }} />
           );
-        //cuối cùng là đã thoả mãn hết các điều kiện thì sẽ sao chép props để vào component mà chúng ta muốn render  
-        return <Component  {...props}/>;
+        //cuối cùng là đã thoả mãn hết các điều kiện thì sẽ sao chép props để vào component mà chúng ta muốn render
+        return <Component {...props} />;
       }}
     />
   );

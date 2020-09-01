@@ -25,6 +25,7 @@ const cookieExtractor = (req) => {
 */
 //phan mem trung gian duoi day dung de uy quyen nen no se dc su dung o bat cu dau muon bao ve tai nguyen
 //co the dung de phan biet dc tai khoan user hoac admin
+//authorization
 passport.use(
   new JwtStratery(
     {
@@ -55,6 +56,7 @@ passport.use(
 //phan mem trung duoi day dung de xac thuc nguoi dung bang username va password chi su dung khi chung ta dang nhap co ban
 //username,password nhan tu nguoi dung
 //done mot chuc nang dc goi khi chung ta thanh cong
+//authentication su dung username va password
 passport.use(
   new LocalStratery((username, password, done) => {
     //tim username nay co ton tai
@@ -74,4 +76,5 @@ passport.use(
   })
 );
 
-//khi nguoi dung da dang nhap trong moi yeu cau tiep theo se bao gom ma thong bao jwt
+//khi nguoi dung da dang nhap, trong moi yeu cau tiep theo se bao gom ma thong bao jwt
+//de xac dinh ro duoc nguoi dung nao gui, va ma co thoi gian hieu luc nen khi het thoi gian hieu luc can dang nhap lai

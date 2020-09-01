@@ -165,7 +165,36 @@ userRouter.get(
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     //.populate lay tat ca thong tin cua cua user thong qua cai id co trong writer
-    Blog.find()
+    Blog.find({ isDisplay: true })
+      .populate("writer")
+      .exec((err, blogs) => {
+        if (err) {
+          return res.status(500).json({
+            message: {
+              msgBody: "Có lỗi khi lấy dữ liệu",
+              msgError: true,
+            },
+          });
+        } else {
+          return res.status(200).json({
+            message: {
+              msgBody: "Lấy dữ liệu thành công",
+              msgError: false,
+            },
+            blogs,
+          });
+        }
+      });
+  }
+);
+
+//lay du lieu blogs co isdisplay = false
+userRouter.get(
+  "/getControlBlog",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    //.populate lay tat ca thong tin cua cua user thong qua cai id co trong writer
+    Blog.find({ isDisplay: false })
       .populate("writer")
       .exec((err, blogs) => {
         if (err) {
@@ -192,7 +221,7 @@ userRouter.get(
   "/user/getBlogs",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    //tim theo id va lay khoa chinh todos
+    //load blogs theo nguoi dang
     User.findById({ _id: req.user._id })
       .populate("blogs")
       .exec((err, blogs) => {
@@ -218,7 +247,7 @@ userRouter.get(
   }
 );
 
-//lấy dữ liệu theo id
+//lấy dữ liệu theo params
 userRouter.get(
   "/:id",
   passport.authenticate("jwt", { session: false }),
@@ -260,7 +289,7 @@ userRouter.get(
   }
 );
 
-//lấy dữ liệu thông qua param
+//lấy dữ liệu thông qua id tu client chuyen xuong
 userRouter.post(
   "/getPost",
   passport.authenticate("jwt", { session: false }),
@@ -315,6 +344,7 @@ userRouter.post(
           });
         blog.title = req.body.title;
         blog.content = req.body.content;
+        blog.isDisplay = req.body.isDisplay;
 
         blog
           .save()

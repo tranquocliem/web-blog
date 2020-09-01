@@ -3,10 +3,9 @@ import BlogService from "../Services/BlogService";
 import AuthService from "../Services/AuthService";
 import BlogItem from "./BlogItems";
 import $ from "jquery";
-import { Link } from "react-router-dom";
 import Pagination from "./Pagination";
 
-const BlogPage = (props) => {
+function ControlBlogsPage(props) {
   const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState([]); //de xac dinh tai khoan nao dang dang nhap
   const [filter, setFilter] = useState("");
@@ -36,7 +35,7 @@ const BlogPage = (props) => {
   // pageBound: 3,
 
   //su dung khi xai getblogbyuser de lay ra ten user dang blog
-  const [username, setUserName] = useState("");
+  //const [username, setUserName] = useState("");
 
   //set user
   useEffect(() => {
@@ -45,49 +44,40 @@ const BlogPage = (props) => {
       setUser(user);
     }, []);
   }, []);
+
   //lay du lieu
   useEffect(() => {
-    if (user.role === "admin")
-      BlogService.getBlog().then((data) => {
-        const { blogs, message } = data; // const blogs = data.blogs; const message = data.message
-        if (!message.msgError) setBlogs(blogs);
-        // console.log(data);
-        // console.log(blogs);
-        // console.log(message);
+    BlogService.getBlogByIsDisplay().then((data) => {
+      const { blogs, message } = data;
+      if (!message.msgError) {
+        setBlogs(blogs);
+      }
+    });
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      BlogService.getBlogByIsDisplay().then((data) => {
+        const { blogs, message } = data;
+        if (!message.msgError) {
+          setBlogs(blogs);
+        }
       });
-    //su dung cho getblogbyuser neu la user (chi load cac blog cua user do)
-    else {
-      BlogService.getBlogByUser().then((data) => {
-        const { blogs, username } = data.blogs;
-        const { message } = data;
-        if (!message.msgError) setBlogs(blogs);
-        setUserName(username);
-      });
-    }
-  }, [user]);
+    }, 300000);
+    return () => clearInterval(interval);
+  });
 
   const toTop = () => {
     window.scrollTo({ top: 500, behavior: "smooth" });
   };
 
   const deletePost = () => {
-    if (user.role === "admin")
-      BlogService.getBlog().then((data) => {
-        const { blogs, message } = data; // const blogs = data.blogs; const message = data.message
-        if (!message.msgError) setBlogs(blogs);
-        // console.log(data);
-        // console.log(blogs);
-        // console.log(message);
-      });
-    //su dung cho getblogbyuser neu la user (chi load cac blog cua user do)
-    else {
-      BlogService.getBlogByUser().then((data) => {
-        const { blogs, username } = data.blogs;
-        const { message } = data;
-        if (!message.msgError) setBlogs(blogs);
-        setUserName(username);
-      });
-    }
+    BlogService.getBlogByIsDisplay().then((data) => {
+      const { blogs, message } = data;
+      if (!message.msgError) {
+        setBlogs(blogs);
+      }
+    });
   };
 
   //ham phan trang
@@ -225,7 +215,7 @@ const BlogPage = (props) => {
       <BlogItem
         key={index}
         blog={blog}
-        username={username}
+        //username={username}
         user={user}
         index={index + 1}
         deletePost={deletePost}
@@ -300,20 +290,8 @@ const BlogPage = (props) => {
       <div className="container-fluid my-2 p-0">
         <div className="jumbotron mt-2">
           <h1 className="display-3 d-flex justify-content-center">
-            Blog Lists
+            Phê Duyệt Blogs
           </h1>
-        </div>
-        <div className="row">
-          <div className="col">
-            <div className="editor-blog">
-              <Link to="/blog/create">
-                <button type="button" className="btn btn-primary">
-                  <i className="fas fa-newspaper mx-2"></i>
-                  Biên Tập
-                </button>
-              </Link>
-            </div>
-          </div>
         </div>
         <div className="row">
           <div className="col">
@@ -328,9 +306,9 @@ const BlogPage = (props) => {
         </div>
 
         {/* <div
-          style={{ fontSize: "25px", fontWeight: "bold", color: "#b8c3ce" }}
-        >{`Trang ${currentPage}/${totalPage}`}</div>
-        <input type="text" onKeyPress={handleKeyPress}></input> */}
+              style={{ fontSize: "25px", fontWeight: "bold", color: "#b8c3ce" }}
+            >{`Trang ${currentPage}/${totalPage}`}</div>
+            <input type="text" onKeyPress={handleKeyPress}></input> */}
         <hr />
         {filter === "" ? renderFindPage() : null}
         <div className="row mt-2 d-flex justify-content-center">
@@ -363,20 +341,8 @@ const BlogPage = (props) => {
       <div className="container-fluid my-2 p-0">
         <div className="jumbotron mt-2">
           <h1 className="display-3 d-flex justify-content-center">
-            Blog Lists
+            Phê Duyệt Blogs
           </h1>
-        </div>
-        <div className="row">
-          <div className="col">
-            <div className="editor-blog">
-              <Link to="/blog/create">
-                <button type="button" className="btn btn-primary">
-                  <i className="fas fa-newspaper mx-2"></i>
-                  Biên Tập
-                </button>
-              </Link>
-            </div>
-          </div>
         </div>
         <div className="row">
           <div className="col">
@@ -402,6 +368,6 @@ const BlogPage = (props) => {
       </div>
     );
   }
-};
+}
 
-export default BlogPage;
+export default ControlBlogsPage;

@@ -1,14 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Message from "./Message";
 import BlogService from "../Services/BlogService";
 import QuillUpdate from "./QuillUpdate";
+import { AuthContext } from "../Context/AuthContext";
 // import { Container } from './styles';
 
 function UpdateBlog(props) {
   const [content, setContent] = useState("");
   const id = props.match.params.id;
   const [title, setTitle] = useState("");
+  const [isDisplay, setIsDisplay] = useState(null);
   const [message, setMessage] = useState(null);
+  const { user } = useContext(AuthContext);
 
   const chuyenDoiURL = (str) => {
     // Chuyển hết sang chữ thường
@@ -42,10 +45,11 @@ function UpdateBlog(props) {
   useEffect(() => {
     //console.log(props.match.params.id);
     BlogService.getBlogById(props.match.params.id).then((data) => {
-      const { content, title } = data;
+      const { content, title, isDisplay } = data;
       //console.log(data);
       setContent(content);
       setTitle(title);
+      setIsDisplay(isDisplay);
       //console.log(title);
     });
   }, [props.match.params.id]);
@@ -63,10 +67,14 @@ function UpdateBlog(props) {
     //console.log(content);
   };
 
+  const onHandleDisplay = () => {
+    setIsDisplay(!isDisplay);
+  };
+
   const onSubmit = (e) => {
     e.preventDefault();
-    BlogService.updateBlog(id, { content, title }).then((data) => {
-      window.scrollTo(0, 0);
+    BlogService.updateBlog(id, { content, title, isDisplay }).then((data) => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
       const { message } = data;
       setMessage(message);
       if (!message.msgError) {
@@ -89,6 +97,16 @@ function UpdateBlog(props) {
       <div className="row d-flex justify-content-center">
         <div className="col-10">
           {message ? <Message message={message} /> : null}
+          {user.role === "admin" ? (
+            <button
+              type="button"
+              onClick={onHandleDisplay}
+              className={isDisplay ? "btn btn-primary" : "btn btn-secondary"}
+            >
+              {isDisplay ? "Đã Phê Duyệt" : "Chưa Phê Duyệt"}
+            </button>
+          ) : null}
+          <br />
           <label
             htmlFor="exampleFormControlInput1"
             className="text-white font-weight-bold mt-3"

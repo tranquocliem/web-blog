@@ -17,6 +17,9 @@ const Users = (props) => {
       <div className="jumbotron mt-2">
         <h1 className="display-3 d-flex justify-content-center">Users</h1>
       </div>
+      <button type="button" className="btn btn-primary">
+        bam
+      </button>
     </div>
   );
 };
