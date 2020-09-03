@@ -7,6 +7,7 @@ import DuongDanURL from "./components/DuongDanURL";
 import TonggleSider from "./components/ToggleSideBar";
 import Footer from "./components/Footer";
 import ScrollToTop from "./components/ScrollToTop";
+import ScrollIndicator from "./components/ScrollIndicator";
 
 // class App extends Component {
 //   render() {
@@ -34,6 +35,7 @@ function App(props) {
 
   return (
     <HashRouter>
+      <ScrollIndicator />
       <div className="wrapper">
         {/* chuyen cai state active xuong NavBar (cha -> con thong qua props) */}
         <NavBar activeNav={activeNav} />

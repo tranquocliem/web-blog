@@ -10,7 +10,6 @@ function LikeAndDisLike(props) {
 
   const variable = { blogId: props.postId, userId: props.userId };
 
-  
   // Get Like And DisLike
   useEffect(() => {
     //Get Like

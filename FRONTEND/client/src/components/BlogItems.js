@@ -129,18 +129,18 @@ function BlogItem(props) {
           >
             <h2>{props.index >= 10 ? props.index : "0" + props.index}</h2>
           </div>
+          {props.blog.isDisplay ? null : (
+            <h4
+              className="card-title"
+              style={{ textAlign: "center", color: "Red" }}
+            >
+              Đang Chờ Phê Duyệt
+            </h4>
+          )}
           <div
             className="card-body"
             style={{ overflowY: "scroll", height: "420px" }}
           >
-            {props.blog.isDisplay ? null : (
-              <h4
-                className="card-title"
-                style={{ textAlign: "center", color: "Red" }}
-              >
-                Đang Chờ Phê Duyệt
-              </h4>
-            )}
             <h4 className="card-title" style={{ color: "black" }}>
               {props.blog.title}
             </h4>

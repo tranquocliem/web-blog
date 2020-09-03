@@ -3,6 +3,7 @@ import Message from "./Message";
 import BlogService from "../Services/BlogService";
 import QuillUpdate from "./QuillUpdate";
 import { AuthContext } from "../Context/AuthContext";
+import UpdateError from "../img/update-error.gif";
 // import { Container } from './styles';
 
 function UpdateBlog(props) {
@@ -77,7 +78,7 @@ function UpdateBlog(props) {
         setActiveHacker(true);
       }
     });
-  }, []);
+  }, [id, user._id]);
 
   const onChangeTitle = (e) => {
     // const newTitle = {...title};
@@ -199,10 +200,24 @@ function UpdateBlog(props) {
   } else {
     return (
       <div className="container-fluid my-2 p-0">
-        <div className="row">
+        <div className="row mt-4">
+          <div className="col d-flex justify-content-center">
+            <img src={UpdateError}></img>
+          </div>
+        </div>
+        <div className="row mt-2">
           <div className="col">
-            <i></i>
-            <div>Loading......</div>
+            <p
+              style={{
+                textAlign: "center",
+                fontWeight: "bold",
+                fontSize: "45px",
+                color: "#6c757d",
+                textShadow: "1px 1px 5px #6c757d",
+              }}
+            >
+              Hừ Nè Dám Sửa Bài Của Người Ta À!!! &#128544;&#128544;&#128544;{" "}
+            </p>
           </div>
         </div>
       </div>
