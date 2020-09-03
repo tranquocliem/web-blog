@@ -3,9 +3,10 @@ import BlogService from "../Services/BlogService";
 import AuthService from "../Services/AuthService";
 import BlogItem from "./BlogItems";
 import $ from "jquery";
+import { Link } from "react-router-dom";
 import Pagination from "./Pagination";
 
-function ControlBlogsPage(props) {
+const BlogPage = (props) => {
   const [blogs, setBlogs] = useState([]);
   const [user, setUser] = useState([]); //de xac dinh tai khoan nao dang dang nhap
   const [filter, setFilter] = useState("");
@@ -26,58 +27,39 @@ function ControlBlogsPage(props) {
   const [isFirstBtnActive, setIsFirstBtnActive] = useState("disabled"); // dung de cap nhat trang thai cho nut next
   const [pageBound, setPageBound] = useState(3); // rang buoc trang (luon nho hon so luong du lieu hien thi)
 
-  // currentPage: 1,
-  // blogsPerPage: 6,
-  // upperPageBound: 3,
-  // lowerPageBound: 0,
-  // isPrevBtnActive: "disabled",
-  // isNextBtnActive: "",
-  // pageBound: 3,
+  const [username, setUserName] = useState("");
 
-  //su dung khi xai getblogbyuser de lay ra ten user dang blog
-  //const [username, setUserName] = useState("");
-
-  //set user
   useEffect(() => {
     AuthService.isAuthenticated().then((data) => {
       const { user } = data;
       setUser(user);
-    }, []);
-  }, []);
-
-  //lay du lieu
-  useEffect(() => {
-    BlogService.getBlogByIsDisplayFalse().then((data) => {
-      const { blogs, message } = data;
-      if (!message.msgError) {
-        setBlogs(blogs);
-      }
     });
   }, []);
-
   useEffect(() => {
-    const interval = setInterval(() => {
-      BlogService.getBlogByIsDisplayFalse().then((data) => {
-        const { blogs, message } = data;
-        if (!message.msgError) {
-          setBlogs(blogs);
-        }
-      });
-    }, 300000);
-    return () => clearInterval(interval);
-  });
+    BlogService.getBlogByIsDisplayTrue().then((data) => {
+      const { blogs, message } = data;
+      if (!message.msgError) setBlogs(blogs);
+    });
+  }, [user]);
 
   const toTop = () => {
     window.scrollTo({ top: 500, behavior: "smooth" });
   };
 
   const deletePost = () => {
-    BlogService.getBlog().then((data) => {
-      const { blogs, message } = data;
-      if (!message.msgError) {
-        setBlogs(blogs);
-      }
-    });
+    if (user.role === "admin")
+      BlogService.getBlog().then((data) => {
+        const { blogs, message } = data;
+        if (!message.msgError) setBlogs(blogs);
+      });
+    else {
+      BlogService.getBlogByUser().then((data) => {
+        const { blogs, username } = data.blogs;
+        const { message } = data;
+        if (!message.msgError) setBlogs(blogs);
+        setUserName(username);
+      });
+    }
   };
 
   //ham phan trang
@@ -215,7 +197,7 @@ function ControlBlogsPage(props) {
       <BlogItem
         key={index}
         blog={blog}
-        //username={username}
+        username={username}
         user={user}
         index={index + 1}
         deletePost={deletePost}
@@ -290,8 +272,20 @@ function ControlBlogsPage(props) {
       <div className="container-fluid my-2 p-0">
         <div className="jumbotron mt-2">
           <h1 className="display-3 d-flex justify-content-center">
-            Phê Duyệt Blogs
+            Blog Lists
           </h1>
+        </div>
+        <div className="row">
+          <div className="col">
+            <div className="editor-blog">
+              <Link to="/blog/create">
+                <button type="button" className="btn btn-primary">
+                  <i className="fas fa-newspaper mx-2"></i>
+                  Biên Tập
+                </button>
+              </Link>
+            </div>
+          </div>
         </div>
         <div className="row">
           <div className="col">
@@ -306,9 +300,9 @@ function ControlBlogsPage(props) {
         </div>
 
         {/* <div
-              style={{ fontSize: "25px", fontWeight: "bold", color: "#b8c3ce" }}
-            >{`Trang ${currentPage}/${totalPage}`}</div>
-            <input type="text" onKeyPress={handleKeyPress}></input> */}
+          style={{ fontSize: "25px", fontWeight: "bold", color: "#b8c3ce" }}
+        >{`Trang ${currentPage}/${totalPage}`}</div>
+        <input type="text" onKeyPress={handleKeyPress}></input> */}
         <hr />
         {filter === "" ? renderFindPage() : null}
         <div className="row mt-2 d-flex justify-content-center">
@@ -341,8 +335,20 @@ function ControlBlogsPage(props) {
       <div className="container-fluid my-2 p-0">
         <div className="jumbotron mt-2">
           <h1 className="display-3 d-flex justify-content-center">
-            Phê Duyệt Blogs
+            Blog Lists
           </h1>
+        </div>
+        <div className="row">
+          <div className="col">
+            <div className="editor-blog">
+              <Link to="/blog/create">
+                <button type="button" className="btn btn-primary">
+                  <i className="fas fa-newspaper mx-2"></i>
+                  Biên Tập
+                </button>
+              </Link>
+            </div>
+          </div>
         </div>
         <div className="row">
           <div className="col">
@@ -368,6 +374,6 @@ function ControlBlogsPage(props) {
       </div>
     );
   }
-}
+};
 
-export default ControlBlogsPage;
+export default BlogPage;

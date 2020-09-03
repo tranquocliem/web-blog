@@ -244,12 +244,25 @@ class QuillEditor extends React.Component {
   componentDidMount = () => {
     //truyen tu trang updateblog qua
     //console.log(this.props.id);
-    BlogService.getBlogById(this.props.id).then((data) => {
-      const { content } = data;
-      //console.log(content);
-      this.setState({
-        editorHtml: content,
-      });
+    // BlogService.getBlogById(this.props.id).then((data) => {
+    //   const { content } = data;
+    //   //console.log(content);
+    //   this.setState({
+    //     editorHtml: content,
+    //   });
+    // });
+
+    const variable = {
+      _id: this.props.id,
+      writer: this.props.userId,
+    };
+    BlogService.getBlogsById(variable).then((data) => {
+      if (data.blog !== null) {
+        const { content } = data.blog;
+        this.setState({
+          editorHtml: content,
+        });
+      }
     });
     //console.log(this.props);
   };

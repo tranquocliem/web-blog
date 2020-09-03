@@ -43,51 +43,29 @@ const BlogPage = (props) => {
     AuthService.isAuthenticated().then((data) => {
       const { user } = data;
       setUser(user);
-    }, []);
+    });
   }, []);
   //lay du lieu
   useEffect(() => {
-    if (user.role === "admin")
-      BlogService.getBlog().then((data) => {
-        const { blogs, message } = data; // const blogs = data.blogs; const message = data.message
-        if (!message.msgError) setBlogs(blogs);
-        // console.log(data);
-        // console.log(blogs);
-        // console.log(message);
-      });
-    //su dung cho getblogbyuser neu la user (chi load cac blog cua user do)
-    else {
-      BlogService.getBlogByUser().then((data) => {
-        const { blogs, username } = data.blogs;
-        const { message } = data;
-        if (!message.msgError) setBlogs(blogs);
-        setUserName(username);
-      });
-    }
-  }, [user]);
+    //if (user.role === "admin")
+    BlogService.getBlogByIsDisplayTrue().then((data) => {
+      const { blogs, message } = data; // const blogs = data.blogs; const message = data.message
+      if (!message.msgError) setBlogs(blogs);
+      // console.log(data);
+      // console.log(blogs);
+      // console.log(message);
+    });
+  }, []);
 
   const toTop = () => {
     window.scrollTo({ top: 500, behavior: "smooth" });
   };
 
   const deletePost = () => {
-    if (user.role === "admin")
-      BlogService.getBlog().then((data) => {
-        const { blogs, message } = data; // const blogs = data.blogs; const message = data.message
-        if (!message.msgError) setBlogs(blogs);
-        // console.log(data);
-        // console.log(blogs);
-        // console.log(message);
-      });
-    //su dung cho getblogbyuser neu la user (chi load cac blog cua user do)
-    else {
-      BlogService.getBlogByUser().then((data) => {
-        const { blogs, username } = data.blogs;
-        const { message } = data;
-        if (!message.msgError) setBlogs(blogs);
-        setUserName(username);
-      });
-    }
+    BlogService.getBlog().then((data) => {
+      const { blogs, message } = data;
+      if (!message.msgError) setBlogs(blogs);
+    });
   };
 
   //ham phan trang

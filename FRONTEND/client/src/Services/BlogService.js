@@ -44,7 +44,7 @@ export default {
 
   getBlogByUser: () => {
     return axios
-      .get("/blog/user/getBlogs")
+      .post("/blog/getBlogsByUser")
       .then((res) => {
         if (res.status !== 400) {
           return res.data;
@@ -62,9 +62,28 @@ export default {
       });
   },
 
-  getBlogByIsDisplay: () => {
+  getBlogByIsDisplayFalse: () => {
     return axios
-      .get("/blog/getControlBlog")
+      .get("/blog/getControlBlogFalse")
+      .then((res) => {
+        if (res.status !== 400) {
+          return res.data;
+        } else {
+          return { message: { msgBody: "Error" }, msgError: true };
+        }
+      })
+      .catch((err) => {
+        return {
+          message: {
+            msgBody: "Lấy dữ liệu không thành công!!!",
+            msgError: true,
+          },
+        };
+      });
+  },
+  getBlogByIsDisplayTrue: () => {
+    return axios
+      .get("/blog/getControlBlogTrue")
       .then((res) => {
         if (res.status !== 400) {
           return res.data;
@@ -92,6 +111,16 @@ export default {
     });
   },
 
+  getBlogsById: (variable) => {
+    return axios.post("/blog/getPost", variable).then((res) => {
+      if (res.status !== 400) {
+        return res.data;
+      } else {
+        return { message: { msgBody: "Error" }, msgError: true };
+      }
+    });
+  },
+
   deleteBlog: (id) => {
     return axios.get("/blog/deletePost/" + id).then((res) => {
       if (res.status !== 400) {
@@ -105,6 +134,23 @@ export default {
   updateBlog: (id, data) => {
     return axios
       .post("/blog/update/" + id, data)
+      .then((res) => {
+        if (res.status !== 400) {
+          return res.data;
+        } else {
+          return { message: { msgBody: "Error" }, msgError: true };
+        }
+      })
+      .catch((err) => {
+        return {
+          message: { msgBody: "Cập Nhật Không Thành Công", msgError: true },
+        };
+      });
+  },
+
+  updateBlogs: (variable) => {
+    return axios
+      .post("/blog/updates", variable)
       .then((res) => {
         if (res.status !== 400) {
           return res.data;

@@ -53,11 +53,64 @@ function BlogItem(props) {
       }
     });
   };
-
   const toTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
+  console.log(props.blog);
+  const renderControl = () => {
+    if (
+      props.blog.writer._id === props.user._id ||
+      props.user.role === "admin"
+    ) {
+      return (
+        <div className="control-blogitem mt-2 py-1">
+          <div className="row d-flex justify-content-center mt-1">
+            <Link to={"/update/" + props.blog._id} onClick={toTop}>
+              <i className="fas fa-cog update px-3"></i>
+            </Link>
+            <Link
+              to={
+                "/post/" +
+                chuyenDoiURL(props.blog.title) +
+                "/" +
+                props.blog._id +
+                ".html"
+              }
+              onClick={toTop}
+            >
+              <i className="fas fa-eye view px-3"></i>
+            </Link>
+            <div onClick={deletePost}>
+              <i className="fas fa-trash-alt delete px-3"></i>
+            </div>
+          </div>
+        </div>
+      );
+    } else {
+      return (
+        <div className="control-blogitem mt-2 py-1">
+          <div className="row d-flex justify-content-center mt-1">
+            <Link
+              to={
+                "/post/" +
+                chuyenDoiURL(props.blog.title) +
+                "/" +
+                props.blog._id +
+                ".html"
+              }
+              onClick={toTop}
+            >
+              <i
+                className="fas fa-eye view px-3"
+                style={{ border: "none" }}
+              ></i>
+            </Link>
+          </div>
+        </div>
+      );
+    }
+  };
   return (
     // {props.index}
     <div className="col-12 col-sm-6 col-lg-4 col-xl-4">
@@ -101,18 +154,22 @@ function BlogItem(props) {
                 : props.username}
             </p> */}
             <p>
-              {props.user.role === "admin"
+              {/* {props.user.role === "admin"
                 ? props.blog.writer !== null
                   ? props.blog.writer.username
                   : "Ẩn danh"
                 : props.username !== null
                 ? props.username
+                : "Ẩn danh"} */}
+              {props.blog.writer !== null
+                ? props.blog.writer.username
                 : "Ẩn danh"}
             </p>
             <br />
             <div dangerouslySetInnerHTML={{ __html: props.blog.content }} />
           </div>
-          <div className="control-blogitem mt-2 py-1">
+          {renderControl()}
+          {/* <div className="control-blogitem mt-2 py-1">
             <div className="row d-flex justify-content-center mt-1">
               <Link to={"/update/" + props.blog._id} onClick={toTop}>
                 <i className="fas fa-cog update px-3"></i>
@@ -133,7 +190,7 @@ function BlogItem(props) {
                 <i className="fas fa-trash-alt delete px-3"></i>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
       <hr />

@@ -166,7 +166,7 @@ userRouter.get(
   (req, res) => {
     //.populate lay tat ca thong tin cua cua user thong qua cai id co trong writer
     Blog.find({ isDisplay: true })
-      .populate("writer")
+      .populate("writer", "_id username role")
       .exec((err, blogs) => {
         if (err) {
           return res.status(500).json({
@@ -190,12 +190,40 @@ userRouter.get(
 
 //lay du lieu blogs co isdisplay = false
 userRouter.get(
-  "/getControlBlog",
+  "/getControlBlogFalse",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     //.populate lay tat ca thong tin cua cua user thong qua cai id co trong writer
     Blog.find({ isDisplay: false })
-      .populate("writer")
+      .populate("writer", "_id username role")
+      .exec((err, blogs) => {
+        if (err) {
+          return res.status(500).json({
+            message: {
+              msgBody: "Có lỗi khi lấy dữ liệu",
+              msgError: true,
+            },
+          });
+        } else {
+          return res.status(200).json({
+            message: {
+              msgBody: "Lấy dữ liệu thành công",
+              msgError: false,
+            },
+            blogs,
+          });
+        }
+      });
+  }
+);
+
+userRouter.get(
+  "/getControlBlogTrue",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    //.populate lay tat ca thong tin cua cua user thong qua cai id co trong writer
+    Blog.find({ isDisplay: true })
+      .populate("writer", "_id username role")
       .exec((err, blogs) => {
         if (err) {
           return res.status(500).json({
@@ -247,13 +275,44 @@ userRouter.get(
   }
 );
 
+userRouter.post(
+  "/getBlogsByUser",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    //load blogs theo nguoi dang
+    const { writer } = req.body;
+    Blog.find({ writer: writer })
+      .populate("writer", "_id username role")
+      .exec((err, blogs) => {
+        if (err)
+          res.status(500).json({
+            message: {
+              msgBody: "Có lỗi khi lấy dữ liệu từ CSDL",
+              msgError: true,
+            },
+          });
+        else {
+          //authenticate : true de biet minh con đang dang nhap
+          res.status(200).json({
+            blogs: blogs,
+            message: {
+              msgBody: "Lấy dữ liệu thành công",
+              msgError: false,
+            },
+            authenticate: true,
+          });
+        }
+      });
+  }
+);
+
 //lấy dữ liệu theo params
 userRouter.get(
   "/:id",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     Blog.findById(req.params.id)
-      .populate("writer")
+      .populate("writer", "_id username role")
       .exec((err, blog) => {
         if (err) {
           res.status(500).json({
@@ -294,12 +353,21 @@ userRouter.post(
   "/getPost",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    Blog.findOne({ _id: req.body.postId })
-      .populate("writer")
-      .exec((err, post) => {
-        if (err) return res.status(400).send(err);
-        res.status(200).json({ success: true, post });
-      });
+    if (req.user.role === "admin") {
+      Blog.findOne({ _id: req.body._id })
+        .populate("writer", "_id username role")
+        .exec((err, blog) => {
+          if (err) return res.status(400).send(err);
+          res.status(200).json({ success: true, blog });
+        });
+    } else {
+      Blog.findOne({ _id: req.body._id, writer: req.body.writer })
+        .populate("writer", "_id username role")
+        .exec((err, blog) => {
+          if (err) return res.status(400).send(err);
+          res.status(200).json({ success: true, blog });
+        });
+    }
   }
 );
 
@@ -374,6 +442,98 @@ userRouter.post(
           },
         });
       });
+  }
+);
+
+userRouter.post(
+  "/updates",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    if (req.user.role === "admin") {
+      Blog.findOne({ _id: req.body._id })
+        .then((blog) => {
+          if (!blog)
+            res.status(500).json({
+              message: {
+                msgBody: "Lấy dữ liệu không thành công",
+                msgError: true,
+              },
+            });
+          blog.title = req.body.title;
+          blog.content = req.body.content;
+          blog.isDisplay = req.body.isDisplay;
+
+          blog
+            .save()
+            .then((bl) => {
+              res.status(200).json({
+                ...bl.toObject(),
+                message: {
+                  msgBody: "Cập nhật dữ liệu thành công",
+                  msgError: false,
+                },
+              });
+            })
+            .catch((err) => {
+              res.status(500).json({
+                message: {
+                  msgBody: "Cập nhật dữ liệu không thành công",
+                  msgError: true,
+                },
+              });
+            });
+        })
+        .catch(() => {
+          res.status(500).json({
+            message: {
+              msgBody: "Không có dữ liệu cần tìm",
+              msgError: true,
+            },
+          });
+        });
+    } else {
+      Blog.findOne({ _id: req.body._id, writer: req.body.writer })
+        .then((blog) => {
+          if (!blog)
+            res.status(500).json({
+              message: {
+                msgBody: "Lấy dữ liệu không thành công",
+                msgError: true,
+              },
+            });
+          blog.title = req.body.title;
+          blog.content = req.body.content;
+          blog.isDisplay = req.body.isDisplay;
+
+          blog
+            .save()
+            .then((bl) => {
+              res.status(200).json({
+                ...bl.toObject(),
+                message: {
+                  msgBody: "Cập nhật dữ liệu thành công",
+                  msgError: false,
+                },
+              });
+            })
+            .catch((err) => {
+              res.status(500).json({
+                message: {
+                  msgBody: "Cập nhật dữ liệu không thành công",
+                  msgError: true,
+                },
+              });
+            });
+        })
+        .catch(() => {
+          res.status(500).json({
+            message: {
+              msgBody: "Không có dữ liệu cần tìm",
+              msgError: true,
+            },
+          });
+        });
+    }
   }
 );
 

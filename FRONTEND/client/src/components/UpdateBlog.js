@@ -11,6 +11,7 @@ function UpdateBlog(props) {
   const [title, setTitle] = useState("");
   const [isDisplay, setIsDisplay] = useState(null);
   const [message, setMessage] = useState(null);
+  const [activeHacker, setActiveHacker] = useState(false);
   const { user } = useContext(AuthContext);
 
   const chuyenDoiURL = (str) => {
@@ -42,17 +43,41 @@ function UpdateBlog(props) {
     return str;
   };
 
+  // useEffect(() => {
+  //   //console.log(props.match.params.id);
+  //   BlogService.getBlogById(props.match.params.id).then((data) => {
+  //     const { content, title, isDisplay } = data;
+  //     //console.log(data);
+  //     setContent(content);
+  //     setTitle(title);
+  //     setIsDisplay(isDisplay);
+  //     //setIdWriter(data.writer._id);
+  //     //console.log(title);
+  //     //console.log(writer);
+  //   });
+  // }, [props.match.params.id]);
+
   useEffect(() => {
-    //console.log(props.match.params.id);
-    BlogService.getBlogById(props.match.params.id).then((data) => {
-      const { content, title, isDisplay } = data;
-      //console.log(data);
-      setContent(content);
-      setTitle(title);
-      setIsDisplay(isDisplay);
-      //console.log(title);
+    const variable = {
+      _id: id,
+      writer: user._id,
+    };
+    BlogService.getBlogsById(variable).then((data) => {
+      if (data.blog !== null) {
+        const { content, title, isDisplay } = data.blog;
+        //console.log(data);
+        setContent(content);
+        setTitle(title);
+        setIsDisplay(isDisplay);
+        //setIdWriter(data.writer._id);
+        //console.log(title);
+        //console.log(writer);
+        //console.log(data);
+      } else {
+        setActiveHacker(true);
+      }
     });
-  }, [props.match.params.id]);
+  }, []);
 
   const onChangeTitle = (e) => {
     // const newTitle = {...title};
@@ -71,9 +96,32 @@ function UpdateBlog(props) {
     setIsDisplay(!isDisplay);
   };
 
+  // const onSubmit = (e) => {
+  //   e.preventDefault();
+  //   BlogService.updateBlog(id, { content, title, isDisplay }).then((data) => {
+  //     window.scrollTo({ top: 0, behavior: "smooth" });
+  //     const { message } = data;
+  //     setMessage(message);
+  //     if (!message.msgError) {
+  //       setTimeout(() => {
+  //         props.history.push(
+  //           "/post/" + chuyenDoiURL(data.title) + "/" + id + ".html"
+  //         );
+  //       }, 1500);
+  //     }
+  //   });
+  // };
+
   const onSubmit = (e) => {
     e.preventDefault();
-    BlogService.updateBlog(id, { content, title, isDisplay }).then((data) => {
+    const variable = {
+      _id: id,
+      writer: user._id,
+      content: content,
+      title: title,
+      isDisplay: isDisplay,
+    };
+    BlogService.updateBlogs(variable).then((data) => {
       window.scrollTo({ top: 0, behavior: "smooth" });
       const { message } = data;
       setMessage(message);
@@ -87,67 +135,79 @@ function UpdateBlog(props) {
     });
   };
 
-  const sendContent = content;
-  //console.log(sendContent);
-  return (
-    <div className="container-fluid my-2 p-0">
-      <div className="jumbotron mt-2">
-        <h1 className="display-3 d-flex justify-content-center">Update Blog</h1>
-      </div>
-      <div className="row d-flex justify-content-center">
-        <div className="col-10">
-          {message ? <Message message={message} /> : null}
-          {user.role === "admin" ? (
-            <button
-              type="button"
-              onClick={onHandleDisplay}
-              className={isDisplay ? "btn btn-primary" : "btn btn-secondary"}
-            >
-              {isDisplay ? "Đã Phê Duyệt" : "Chưa Phê Duyệt"}
-            </button>
-          ) : null}
-          <br />
-          <label
-            htmlFor="exampleFormControlInput1"
-            className="text-white font-weight-bold mt-3"
-          >
-            Nội Dung:
-          </label>
-          <QuillUpdate
-            placeholder={"Bắt đầu nhập..."}
-            onEditorChange={onEditorChange}
-            id={id}
-            sendContent={sendContent}
-            Temp={content}
-          />
-          <form onSubmit={onSubmit}>
-            <div className="form-group">
-              <label
-                htmlFor="exampleFormControlInput1"
-                className="text-white font-weight-bold mt-4"
-              >
-                Tiêu Đề:
-              </label>
-              <input
-                name="title"
-                value={title}
-                onChange={(e) => onChangeTitle(e)}
-                type="text"
-                className="form-control"
-                placeholder="Nhập tiêu đề..."
-              />
+  if (!activeHacker) {
+    return (
+      <div className="container-fluid my-2 p-0">
+        <div className="jumbotron mt-2">
+          <h1 className="display-3 d-flex justify-content-center">
+            Update Blog
+          </h1>
+        </div>
+        <div className="row d-flex justify-content-center">
+          <div className="col-10">
+            {message ? <Message message={message} /> : null}
+            {user.role === "admin" ? (
               <button
-                type="submit"
-                className="btn btn-primary btn-lg btn-block mt-5"
+                type="button"
+                onClick={onHandleDisplay}
+                className={isDisplay ? "btn btn-primary" : "btn btn-secondary"}
               >
-                Cập Nhật
+                {isDisplay ? "Đã Phê Duyệt" : "Chưa Phê Duyệt"}
               </button>
-            </div>
-          </form>
+            ) : null}
+            <br />
+            <label
+              htmlFor="exampleFormControlInput1"
+              className="text-white font-weight-bold mt-3"
+            >
+              Nội Dung:
+            </label>
+            <QuillUpdate
+              placeholder={"Bắt đầu nhập..."}
+              onEditorChange={onEditorChange}
+              id={id}
+              userId={user._id}
+            />
+            <form onSubmit={onSubmit}>
+              <div className="form-group">
+                <label
+                  htmlFor="exampleFormControlInput1"
+                  className="text-white font-weight-bold mt-4"
+                >
+                  Tiêu Đề:
+                </label>
+                <input
+                  name="title"
+                  value={title}
+                  onChange={(e) => onChangeTitle(e)}
+                  type="text"
+                  className="form-control"
+                  placeholder="Nhập tiêu đề..."
+                />
+                <button
+                  type="submit"
+                  className="btn btn-primary btn-lg btn-block mt-5"
+                >
+                  Cập Nhật
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  } else {
+    return (
+      <div className="container-fluid my-2 p-0">
+        <div className="row">
+          <div className="col">
+            <i></i>
+            <div>Loading......</div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 }
 
 export default UpdateBlog;

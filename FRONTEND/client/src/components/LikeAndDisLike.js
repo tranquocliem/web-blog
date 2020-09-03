@@ -3,14 +3,15 @@ import LikeDisLikeService from "../Services/LikeDisLikeService";
 
 function LikeAndDisLike(props) {
   //like and dislike
-  const [activeLike, setActiveLike] = useState(false);
-  const [activeDisLike, setActiveDisLike] = useState(false);
+  const [activeLike, setActiveLike] = useState(null);
+  const [activeDisLike, setActiveDisLike] = useState(null);
   const [Likes, setLikes] = useState(0);
   const [disLikes, setDisLikes] = useState(0);
 
   const variable = { blogId: props.postId, userId: props.userId };
 
-  //Get Like And DisLike
+  
+  // Get Like And DisLike
   useEffect(() => {
     //Get Like
     LikeDisLikeService.getLike(variable).then((data) => {
@@ -21,14 +22,13 @@ function LikeAndDisLike(props) {
         //nếu người đang đăng nhập đã like bài này rồi ta set lại cái activeLike(true) tức đã like
         data.likes.map((like) => {
           if (like.userId === props.userId) {
-            setActiveLike(true);
+            setActiveLike("liked");
           }
         });
       } else {
         alert("Get Like Error");
       }
     });
-
     //Get DisLike
     LikeDisLikeService.getDisLike(variable).then((data) => {
       const { disLikes } = data;
@@ -38,7 +38,7 @@ function LikeAndDisLike(props) {
         //nếu người đang đăng nhập đã dislike bài này rồi ta set lại cái activeDisLike(true) tức đã dislike
         data.disLikes.map((disLike) => {
           if (disLike.userId === props.userId) {
-            setActiveDisLike(true);
+            setActiveDisLike("disliked");
           }
         });
       } else {
@@ -47,18 +47,20 @@ function LikeAndDisLike(props) {
     });
   }, []);
 
+  //console.log(activeLike);
+  //console.log(activeDisLike);
   //function Like And DisLike
   const onLike = () => {
-    if (!activeLike) {
+    if (activeLike === null) {
       LikeDisLikeService.upLike(variable).then((data) => {
         if (data.success) {
           setLikes(Likes + 1);
-          setActiveLike(true);
+          setActiveLike("liked");
 
           //nếu nút dislike đã đã đc click thì ta xoá nó đi
           if (activeDisLike) {
             setDisLikes(disLikes - 1);
-            setActiveDisLike(false);
+            setActiveDisLike(null);
           }
         } else {
           alert("On Click Like Error");
@@ -68,7 +70,7 @@ function LikeAndDisLike(props) {
       LikeDisLikeService.unLike(variable).then((data) => {
         if (data.success) {
           setLikes(Likes - 1);
-          setActiveLike(false);
+          setActiveLike(null);
         } else {
           alert("On Click Like Error Un");
         }
@@ -76,16 +78,16 @@ function LikeAndDisLike(props) {
     }
   };
   const onDisLike = () => {
-    if (!activeDisLike) {
+    if (activeDisLike === null) {
       LikeDisLikeService.upDisLike(variable).then((data) => {
         if (data.success) {
           setDisLikes(disLikes + 1);
-          setActiveDisLike(true);
+          setActiveDisLike("disliked");
 
           //nếu nút like đã được click thì xoá nó đi
-          if (activeLike) {
+          if (activeLike !== null) {
             setLikes(Likes - 1);
-            setActiveLike(false);
+            setActiveLike(null);
           }
         } else {
           alert("On Click DisLike Error");
@@ -95,7 +97,7 @@ function LikeAndDisLike(props) {
       LikeDisLikeService.unDisLike(variable).then((data) => {
         if (data.success) {
           setDisLikes(disLikes - 1);
-          setActiveDisLike(false);
+          setActiveDisLike(null);
         } else {
           alert("On Click DisLike Error");
         }
@@ -109,7 +111,9 @@ function LikeAndDisLike(props) {
         <button type="button" onClick={onLike} className="btn btn-primary">
           <i
             className={
-              activeLike ? "fas fa-thumbs-up mx-2" : "far fa-thumbs-up mx-2"
+              activeLike === "liked"
+                ? "fas fa-thumbs-up mx-2"
+                : "far fa-thumbs-up mx-2"
             }
           ></i>
           {Likes}
@@ -121,7 +125,7 @@ function LikeAndDisLike(props) {
         >
           <i
             className={
-              activeDisLike
+              activeDisLike === "disliked"
                 ? "fas fa-thumbs-down mx-2"
                 : "far fa-thumbs-down mx-2"
             }
