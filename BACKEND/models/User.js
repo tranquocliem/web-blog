@@ -3,6 +3,12 @@ const bcrypt = require("bcrypt");
 const Blog = require("./Blog");
 
 const UserSchema = new mongoose.Schema({
+  email: {
+    type: String,
+    unique: true,
+    lowercase: true,
+    trim: true,
+  },
   username: {
     type: String,
     required: true, //yeu cau vi bat buoc vi nguoi dung phai co ten nguoi dung
@@ -16,8 +22,12 @@ const UserSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ["user", "admin"], //vai tro phai dc chon trc va khong the muon nhap gi nhap nen dung enum chi chon dc cac gia tri trong nay
+    enum: ["user", "admin", "spadmin"], //vai tro phai dc chon trc va khong the muon nhap gi nhap nen dung enum chi chon dc cac gia tri trong nay
     required: true,
+  },
+  resetLink: {
+    type: String,
+    default: "",
   },
   //luu todos vao nguoi dung
   //todos: [{ type: mongoose.Schema.Types.ObjectId, ref: "Todo" }],

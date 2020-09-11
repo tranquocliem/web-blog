@@ -62,7 +62,7 @@ const BlogPage = (props) => {
   };
 
   const deletePost = () => {
-    BlogService.getBlog().then((data) => {
+    BlogService.getBlogByIsDisplayTrue().then((data) => {
       const { blogs, message } = data;
       if (!message.msgError) setBlogs(blogs);
     });

@@ -3,7 +3,12 @@ import { Link } from "react-router-dom";
 import AuthService from "../Services/AuthService";
 import Message from "../components/Message";
 const Register = (props) => {
-  const [user, setUser] = useState({ username: "", password: "", role: "" });
+  const [user, setUser] = useState({
+    email: "",
+    username: "",
+    password: "",
+    role: "",
+  });
   const [configPass, setConfigPass] = useState({ configPass: "" });
   const [activePass, setActivePass] = useState(null);
   const [activeConfigPass, setActiveConfigPass] = useState(null);
@@ -20,7 +25,7 @@ const Register = (props) => {
   }, []);
 
   const resetForm = () => {
-    setUser({ username: "", password: "", role: "" });
+    setUser({ username: "", password: "", role: "", email: "" });
     setConfigPass({ configPass: "" });
     setActivePass(null);
     setActiveConfigPass(null);
@@ -154,16 +159,17 @@ const Register = (props) => {
                   )
                 ) : null}
               </div>
-              {/* <div className="form-group">
-                <label htmlFor="username">Loại Tài Khoản:</label>
+              <div className="form-group">
+                <label htmlFor="email">E-Mail:</label>
                 <input
-                  value={user.role}
-                  name="role"
+                  value={user.email}
+                  name="email"
                   className="form-control"
                   onChange={onChange}
-                  placeholder="User or Admin"
+                  placeholder="E-Mail"
+                  type="email"
                 />
-              </div> */}
+              </div>
               <div className="form-group">
                 <label htmlFor="role">Chọn Loại Tài Khoản</label>
                 <select

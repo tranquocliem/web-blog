@@ -11,7 +11,7 @@ const cookieExtractor = (req) => {
   //neu doi tuong yeu o do va yeu cau cookie cua chung ta khong trong
   //chung ta kiem tra xem co ma thong bao jwt o do khong
   if (req && req.cookies) {
-    token = req.cookies["access_token"];//yeu cau se duoc gui len cai token co ten nay
+    token = req.cookies["access_token"]; //yeu cau se duoc gui len cai token co ten nay
   }
   //cuoi cung la tra ra token
   return token;

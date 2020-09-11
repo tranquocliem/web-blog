@@ -1,6 +1,6 @@
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { HashRouter } from "react-router-dom";
+import { BrowserRouter, HashRouter } from "react-router-dom";
 import React, { useState } from "react";
 import NavBar from "./components/NavBar";
 import DuongDanURL from "./components/DuongDanURL";

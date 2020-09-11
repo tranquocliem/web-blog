@@ -5,7 +5,9 @@ const passportConfig = require("../config/passport");
 const JWT = require("jsonwebtoken"); //dung de ky ma thong bao JWT de khi nao nguoi dung ky ma thong bao JWT ve co ban nguoi dung dang tao ma cho server
 const User = require("../models/User");
 const Todo = require("../models/Todo");
-const { authenticate } = require("passport");
+const { authenticate, Passport } = require("passport");
+const bcrypt = require("bcrypt");
+const lodash = require("lodash");
 
 const signToken = (userID) => {
   return JWT.sign(
@@ -22,7 +24,7 @@ const signToken = (userID) => {
 userRouter.post("/register", (req, res) => {
   //ES6
   //bt const username = req.body.username
-  const { username, password, role } = req.body;
+  const { email, username, password, role } = req.body;
   //kiem tra username da ton tai
   User.findOne({ username }, (err, user) => {
     //co loi khi tim kiem voi CSDL
@@ -38,7 +40,7 @@ userRouter.post("/register", (req, res) => {
       });
     else {
       //khi nguoi dung da hop le ta tao moi mot nguoi dung tu model User va chuyen vao username, password, role
-      const newUser = new User({ username, password, role });
+      const newUser = new User({ email, username, password, role });
       //luu vao CSDL
       newUser.save((err) => {
         if (err)
@@ -46,6 +48,7 @@ userRouter.post("/register", (req, res) => {
             message: {
               msgBody: "Có lỗi khi thêm tài khoản vào CSDL",
               msgError: true,
+              err,
             },
           });
         else
@@ -81,6 +84,124 @@ userRouter.get(
   (req, res) => {
     res.clearCookie("access_token");
     res.json({ user: { username: "", role: "" }, success: true });
+  }
+);
+
+//handle pass
+userRouter.post(
+  "/user",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    const { username, old_Password, password, configPassword } = req.body;
+    User.findOne({ username: username }, (err, user) => {
+      if (err || !user) {
+        console.log("ERROR 1");
+        return res.status(400).json({
+          success: false,
+          err,
+        });
+      }
+      if (password !== configPassword) {
+        console.log("ERROR 2");
+        return res.status(400).json({
+          success: false,
+        });
+      }
+      bcrypt.compare(old_Password, req.user.password, function (err, isMatch) {
+        if (err) {
+          res.status(400).json({
+            success: false,
+            message: {
+              msgBody: "Có Lỗi!!!",
+              msgError: true,
+            },
+          });
+        }
+        if (!isMatch) {
+          res.status(400).json({
+            success: false,
+            isMatch: isMatch,
+            message: {
+              msgBody: "Mật khẩu cũ không đúng",
+              msgError: true,
+            },
+          });
+        } else {
+          const updatePassword = {
+            password: password,
+          };
+          user = lodash.extend(user, updatePassword);
+          user.save((err, result) => {
+            if (err) {
+              console.log("ERROR 3");
+              return res.status(400).json({
+                success: false,
+                err,
+              });
+            }
+            console.log("Thanh Cong");
+            res.status(200).json({
+              success: true,
+              message: {
+                msgBody: "Thay Đổi Mật Khẩu Thành Công",
+                msgError: false,
+              },
+            });
+          });
+        }
+      });
+    });
+    // const { _id } = req.user._id;
+    // User.findByIdAndUpdate({ _id: _id }, req.body, function (err, user) {
+    //   const new_password = req.body.new_password;
+    //   bcrypt.hash(new_password, 10, function (err, hash) {
+    //     user.password = hash;
+    //     user
+    //       .save()
+    //       .then((us) => {
+    //         res.status(200).json({ success: true });
+    //       })
+    //       .catch((err) => {
+    //         res.status(400).json({ success: false });
+    //       });
+    //   });
+    // });
+    // User.findOne({ username: username }).exec((err, user) => {
+    //   if (user !== null) {
+    //     const hash = req.user.password;
+    //     bcrypt.compare(old_password, hash, function (err, result) {
+    //       if (result) {
+    //         bcrypt.hash(new_password, 10, function (err, hash) {
+    //           user.password = hash;
+    //           user
+    //             .save()
+    //             .then((us) => {
+    //               res.status(200).json({ success: true, us });
+    //             })
+    //             .catch((err) => {
+    //               res.status(400).json({ success: false });
+    //             });
+    //         });
+    //       }
+    //     });
+    //   }
+    // });
+  }
+);
+
+userRouter.post(
+  "/test",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    const { username, old_Password, password, configPassword } = req.body;
+    bcrypt.compare(old_Password, req.user.password, function (err, result) {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(old_Password + "=" + req.user.password);
+        console.log(result);
+      }
+    });
   }
 );
 
@@ -284,14 +405,14 @@ userRouter.delete(
 
 //load users va kiem tra tai khoan dang dang nhap la tai khoan loai gi (user,admin)
 userRouter.get(
-  "/admin/users",
+  "/admin/account",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
     if (req.user.role === "admin") {
       // res.status(200).json({
       //   message: { msgBody: "Đây là tài khoản admin", msgError: false },
       // });
-      User.find((err, users) => {
+      User.find({ role: "user" }, { password: 0, __v: 0 }, (err, users) => {
         if (err) {
           res.status(500).json({
             message: {
@@ -303,14 +424,89 @@ userRouter.get(
           res.status(200).json({
             users,
             authenticate: true,
-            message: { msgBody: "Đây là tài khoản admin", msgError: false },
+            message: {
+              msgBody: `Đây là tài khoản ${req.user.role}`,
+              msgError: false,
+            },
           });
         }
       });
     } else
       res.status(403).json({
-        message: { msgBody: "Đây không phải tài khoản admin", msgError: true },
+        message: {
+          msgBody: "Đây không phải tài khoản quản trị",
+          msgError: true,
+        },
       });
+  }
+);
+
+userRouter.get(
+  "/spadmin/account",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    if (req.user.role === "spadmin") {
+      // res.status(200).json({
+      //   message: { msgBody: "Đây là tài khoản admin", msgError: false },
+      // });
+      User.find(
+        { username: { $ne: req.user.username } },
+        { password: 0, __v: 0, blogs: 0 },
+        (err, users) => {
+          if (err) {
+            res.status(500).json({
+              message: {
+                msgBody: "Có lỗi khi lấy dữ liệu từ CSDL",
+                msgError: true,
+              },
+            });
+          } else {
+            res.status(200).json({
+              users,
+              authenticate: true,
+              message: {
+                msgBody: "Đây là tài khoản spadmin",
+                msgError: false,
+              },
+            });
+          }
+        }
+      );
+    } else
+      res.status(403).json({
+        message: {
+          msgBody: "Đây không phải tài khoản spadmin",
+          msgError: true,
+        },
+      });
+  }
+);
+
+//delete user
+userRouter.delete(
+  "/remove/user/:id",
+  passport.authenticate("jwt", { session: false }),
+  (req, res) => {
+    if (req.user.role === "spadmin" || req.user.role === "admin") {
+      User.findByIdAndDelete({ _id: req.params.id }, (err, result) => {
+        if (err) {
+          res.status(400).json({
+            err,
+            message: {
+              msgBody: "Xoá tài khoản không thành công",
+              msgError: true,
+            },
+          });
+        } else {
+          res.status(400).json({
+            message: {
+              msgBody: "Xoá thành công",
+              msgError: false,
+            },
+          });
+        }
+      });
+    }
   }
 );
 

@@ -344,7 +344,7 @@ function ControlBlogsPage(props) {
             Phê Duyệt Blogs
           </h1>
         </div>
-        <div className="row">
+        {/* <div className="row">
           <div className="col">
             <input
               className="mt-2"
@@ -356,7 +356,7 @@ function ControlBlogsPage(props) {
           </div>
         </div>
 
-        {filter === "" ? renderFindPage() : null}
+        {filter === "" ? renderFindPage() : null} */}
         <div className="row">
           <h1
             className="col-12 d-flex justify-content-center mt-5"

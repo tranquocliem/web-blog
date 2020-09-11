@@ -31,48 +31,48 @@ class DuongDanURL extends Component {
         <UnPrivateRouter path="/register" component={Register} />
         <PrivateRouter
           path="/add-todo"
-          roles={["user", "admin"]}
+          roles={["user", "admin", "spadmin"]}
           component={AddTodo}
         />
         <PrivateRouter
           path="/edit-todo/:id"
-          roles={["user", "admin"]}
+          roles={["user", "admin", "spadmin"]}
           component={EditTodo}
         />
         <PrivateRouter
           path="/admin/todos"
-          roles={["admin"]}
+          roles={["admin", "spadmin"]}
           component={Todos}
         />
         <PrivateRouter
           path="/admin/users"
-          roles={["admin"]}
+          roles={["admin", "spadmin"]}
           component={Users}
         />
         <PrivateRouter path="/todos" roles={["user"]} component={TodosUser} />
         <PrivateRouter
           path="/blog/create"
-          roles={["user", "admin"]}
+          roles={["user", "admin", "spadmin"]}
           component={CreateBlog}
         />
         <PrivateRouter
           path="/blogs"
-          roles={["user", "admin"]}
+          roles={["user", "admin", "spadmin"]}
           component={BlogPage}
         />
         <PrivateRouter
           path="/controlblogs"
-          roles={["admin"]}
+          roles={["admin", "spadmin"]}
           component={ControlBlogsPage}
         />
         <PrivateRouter
           path="/post/:tieude/:id.html"
-          roles={["user", "admin"]}
+          roles={["user", "admin", "spadmin"]}
           component={DetailBlog}
         />
         <PrivateRouter
           path="/update/:id"
-          roles={["user", "admin"]}
+          roles={["user", "admin", "spadmin"]}
           component={UpdateBlog}
         />
 

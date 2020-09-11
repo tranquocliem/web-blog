@@ -59,56 +59,59 @@ function BlogItem(props) {
 
   console.log(props.blog);
   const renderControl = () => {
-    if (
-      props.blog.writer._id === props.user._id ||
-      props.user.role === "admin"
-    ) {
-      return (
-        <div className="control-blogitem mt-2 py-1">
-          <div className="row d-flex justify-content-center mt-1">
-            <Link to={"/update/" + props.blog._id} onClick={toTop}>
-              <i className="fas fa-cog update px-3"></i>
-            </Link>
-            <Link
-              to={
-                "/post/" +
-                chuyenDoiURL(props.blog.title) +
-                "/" +
-                props.blog._id +
-                ".html"
-              }
-              onClick={toTop}
-            >
-              <i className="fas fa-eye view px-3"></i>
-            </Link>
-            <div onClick={deletePost}>
-              <i className="fas fa-trash-alt delete px-3"></i>
+    if (props.blog.writer !== null) {
+      if (
+        props.blog.writer._id === props.user._id ||
+        props.user.role === "admin" ||
+        props.user.role === "spadmin"
+      ) {
+        return (
+          <div className="control-blogitem mt-2 py-1">
+            <div className="row d-flex justify-content-center mt-1">
+              <Link to={"/update/" + props.blog._id} onClick={toTop}>
+                <i className="fas fa-cog update px-3"></i>
+              </Link>
+              <Link
+                to={
+                  "/post/" +
+                  chuyenDoiURL(props.blog.title) +
+                  "/" +
+                  props.blog._id +
+                  ".html"
+                }
+                onClick={toTop}
+              >
+                <i className="fas fa-eye view px-3"></i>
+              </Link>
+              <div onClick={deletePost}>
+                <i className="fas fa-trash-alt delete px-3"></i>
+              </div>
             </div>
           </div>
-        </div>
-      );
-    } else {
-      return (
-        <div className="control-blogitem mt-2 py-1">
-          <div className="row d-flex justify-content-center mt-1">
-            <Link
-              to={
-                "/post/" +
-                chuyenDoiURL(props.blog.title) +
-                "/" +
-                props.blog._id +
-                ".html"
-              }
-              onClick={toTop}
-            >
-              <i
-                className="fas fa-eye view px-3"
-                style={{ border: "none" }}
-              ></i>
-            </Link>
+        );
+      } else {
+        return (
+          <div className="control-blogitem mt-2 py-1">
+            <div className="row d-flex justify-content-center mt-1">
+              <Link
+                to={
+                  "/post/" +
+                  chuyenDoiURL(props.blog.title) +
+                  "/" +
+                  props.blog._id +
+                  ".html"
+                }
+                onClick={toTop}
+              >
+                <i
+                  className="fas fa-eye view px-3"
+                  style={{ border: "none" }}
+                ></i>
+              </Link>
+            </div>
           </div>
-        </div>
-      );
+        );
+      }
     }
   };
   return (

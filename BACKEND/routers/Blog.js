@@ -353,18 +353,18 @@ userRouter.post(
   "/getPost",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    if (req.user.role === "admin") {
+    if (req.user.role === "admin" || req.user.role === "spadmin") {
       Blog.findOne({ _id: req.body._id })
         .populate("writer", "_id username role")
         .exec((err, blog) => {
-          if (err) return res.status(400).send(err);
+          if (err) return res.status(400).json(err);
           res.status(200).json({ success: true, blog });
         });
     } else {
       Blog.findOne({ _id: req.body._id, writer: req.body.writer })
         .populate("writer", "_id username role")
         .exec((err, blog) => {
-          if (err) return res.status(400).send(err);
+          if (err) return res.status(400).json(err);
           res.status(200).json({ success: true, blog });
         });
     }
@@ -449,7 +449,7 @@ userRouter.post(
   "/updates",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    if (req.user.role === "admin") {
+    if (req.user.role === "admin" || req.user.role === "spadmin") {
       Blog.findOne({ _id: req.body._id })
         .then((blog) => {
           if (!blog)
@@ -491,7 +491,7 @@ userRouter.post(
             },
           });
         });
-    } else {
+    } else if (req.user.role === "user") {
       Blog.findOne({ _id: req.body._id, writer: req.body.writer })
         .then((blog) => {
           if (!blog)

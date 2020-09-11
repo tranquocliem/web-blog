@@ -4,7 +4,7 @@ import BlogService from "../Services/BlogService";
 import QuillUpdate from "./QuillUpdate";
 import { AuthContext } from "../Context/AuthContext";
 import UpdateError from "../img/update-error.gif";
-// import { Container } from './styles';
+import AuthService from "../Services/AuthService";
 
 function UpdateBlog(props) {
   const [content, setContent] = useState("");
@@ -12,8 +12,9 @@ function UpdateBlog(props) {
   const [title, setTitle] = useState("");
   const [isDisplay, setIsDisplay] = useState(null);
   const [message, setMessage] = useState(null);
-  const [activeHacker, setActiveHacker] = useState(false);
+  const [activeHacker, setActiveHacker] = useState(null);
   const { user } = useContext(AuthContext);
+  //const [user, setUser] = useState([]);
 
   const chuyenDoiURL = (str) => {
     // Chuyển hết sang chữ thường
@@ -147,7 +148,7 @@ function UpdateBlog(props) {
         <div className="row d-flex justify-content-center">
           <div className="col-10">
             {message ? <Message message={message} /> : null}
-            {user.role === "admin" ? (
+            {user.role === "admin" || user.role === "spadmin" ? (
               <button
                 type="button"
                 onClick={onHandleDisplay}
@@ -199,10 +200,10 @@ function UpdateBlog(props) {
     );
   } else {
     return (
-      <div className="container-fluid my-2 p-0">
+      <div className="container-fluid my-2 p-0 no-select">
         <div className="row mt-4">
           <div className="col d-flex justify-content-center">
-            <img src={UpdateError}></img>
+            <img src={UpdateError} alt="error"></img>
           </div>
         </div>
         <div className="row mt-2">
@@ -216,7 +217,10 @@ function UpdateBlog(props) {
                 textShadow: "1px 1px 5px #6c757d",
               }}
             >
-              Hừ Nè Dám Sửa Bài Của Người Ta À!!! &#128544;&#128544;&#128544;{" "}
+              Hừ Nè Dám Sửa Bài Của Người Ta À!!!{" "}
+              <span role="img" aria-label="sheep">
+                &#128544;&#128544;&#128544;
+              </span>
             </p>
           </div>
         </div>

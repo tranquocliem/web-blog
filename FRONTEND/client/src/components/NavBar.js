@@ -71,7 +71,7 @@ const NavBar = (props) => {
           </NavLink>
         </li>
 
-        {user.role === "admin" ? (
+        {user.role === "admin" || user.role === "spadmin" ? (
           <>
             <li>
               <a
