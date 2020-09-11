@@ -4,7 +4,6 @@ import BlogService from "../Services/BlogService";
 import QuillUpdate from "./QuillUpdate";
 import { AuthContext } from "../Context/AuthContext";
 import UpdateError from "../img/update-error.gif";
-import AuthService from "../Services/AuthService";
 
 function UpdateBlog(props) {
   const [content, setContent] = useState("");
@@ -12,9 +11,10 @@ function UpdateBlog(props) {
   const [title, setTitle] = useState("");
   const [isDisplay, setIsDisplay] = useState(null);
   const [message, setMessage] = useState(null);
-  const [activeHacker, setActiveHacker] = useState(null);
+  const [activeHacker, setActiveHacker] = useState(false);
   const { user } = useContext(AuthContext);
-  //const [user, setUser] = useState([]);
+
+  console.log(user);
 
   const chuyenDoiURL = (str) => {
     // Chuyển hết sang chữ thường
@@ -58,7 +58,6 @@ function UpdateBlog(props) {
   //     //console.log(writer);
   //   });
   // }, [props.match.params.id]);
-
   useEffect(() => {
     const variable = {
       _id: id,
@@ -68,6 +67,7 @@ function UpdateBlog(props) {
       if (data.blog !== null) {
         const { content, title, isDisplay } = data.blog;
         //console.log(data);
+        setActiveHacker(false);
         setContent(content);
         setTitle(title);
         setIsDisplay(isDisplay);

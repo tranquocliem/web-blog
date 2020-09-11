@@ -57,7 +57,7 @@ function BlogItem(props) {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
-  console.log(props.blog);
+  //console.log(props.blog);
   const renderControl = () => {
     if (props.blog.writer !== null) {
       if (
