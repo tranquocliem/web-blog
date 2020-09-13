@@ -85,11 +85,11 @@ const NavBar = (props) => {
               <ul className="collapse list-unstyled" id="pageSubmenu">
                 <li>
                   <NavLink
-                    to="/admin/users"
+                    to="/admin/account"
                     activeStyle={{ background: "#7f0b16bf" }}
                   >
                     <i className="fa fa-users-cog" />
-                    Users
+                    Quản Lý Tài Khoản
                   </NavLink>
                 </li>
                 <li>
@@ -146,8 +146,8 @@ const NavBar = (props) => {
     >
       <NavLink to="/">
         <div className="sidebar-header">
-          <h3>M.E.R.N Stack</h3>
-          <strong>F.B</strong>
+          <h3>Manager Blog</h3>
+          <strong>M.B</strong>
         </div>
       </NavLink>
       <hr />

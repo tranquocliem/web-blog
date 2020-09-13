@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { Link } from "react-router-dom";
-import UserItem from "./UserItem";
+import AccountList from "./AccountList";
 import UserService from "../Services/UserService";
 import { AuthContext } from "../Context/AuthContext";
 // class Users extends Component {
@@ -15,7 +15,7 @@ import { AuthContext } from "../Context/AuthContext";
 //   }
 // }
 
-const Users = (props) => {
+const Account = (props) => {
   const [listUsers, setListUsers] = useState([]);
   const { user } = useContext(AuthContext);
 
@@ -56,7 +56,7 @@ const Users = (props) => {
   const renderUser = listUsers.map((userItem, index) => {
     return (
       <tr key={index}>
-        <UserItem
+        <AccountList
           userItem={userItem}
           index={index + 1}
           reloadUser={reloadUser}
@@ -73,7 +73,7 @@ const Users = (props) => {
       <div className="row d-flex justify-content-center">
         <div className="col">
           <Link
-            to="/register"
+            to="/add-account"
             className="btn btn-primary my-2"
             //style={{ width: "200px" }}
           >
@@ -96,4 +96,4 @@ const Users = (props) => {
   );
 };
 
-export default Users;
+export default Account;

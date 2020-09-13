@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Switch, Route } from "react-router-dom";
 import Home from "./Home";
-import Users from "./Users";
 import Todos from "./Todos";
 import Login from "./Login";
 import Register from "./Register";
@@ -15,6 +14,7 @@ import BlogPage from "./BlogPage";
 import DetailBlog from "./DetailBlog";
 import UpdateBlog from "./UpdateBlog";
 import ControlBlogsPage from "./ControlBlogsPage";
+import Account from "./Account";
 class DuongDanURL extends Component {
   render() {
     const hehe = "hehe";
@@ -29,6 +29,11 @@ class DuongDanURL extends Component {
         />
         <UnPrivateRouter path="/login" component={Login} />
         <UnPrivateRouter path="/register" component={Register} />
+        <PrivateRouter
+          path="/add-account"
+          roles={["admin","spadmin"]}
+          component={Register}
+        />
         <PrivateRouter
           path="/add-todo"
           roles={["user", "admin", "spadmin"]}
@@ -45,9 +50,9 @@ class DuongDanURL extends Component {
           component={Todos}
         />
         <PrivateRouter
-          path="/admin/users"
+          path="/admin/account"
           roles={["admin", "spadmin"]}
-          component={Users}
+          component={Account}
         />
         <PrivateRouter path="/todos" roles={["user"]} component={TodosUser} />
         <PrivateRouter

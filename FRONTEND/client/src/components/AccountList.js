@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import UserService from "../Services/UserService";
 import swal from "sweetalert";
-const UserItem = (props) => {
+const AccountList = (props) => {
   const onClickRemove = () => {
     swal({
       title: "Bạn Có Chắc Không?",
@@ -54,4 +54,4 @@ const UserItem = (props) => {
   );
 };
 
-export default UserItem;
+export default AccountList;

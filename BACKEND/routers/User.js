@@ -72,7 +72,9 @@ userRouter.post(
       const { _id, username, role } = req.user;
       const token = signToken(_id);
       res.cookie("access_token", token, { httpOnly: true, sameSite: true });
-      res.status(200).json({ isAuthenticated: true, user: { _id, username, role } });
+      res
+        .status(200)
+        .json({ isAuthenticated: true, user: { _id, username, role } });
     }
   }
 );
@@ -89,10 +91,11 @@ userRouter.get(
 
 //handle pass
 userRouter.post(
-  "/user",
+  "/account/handlePass",
   passport.authenticate("jwt", { session: false }),
   (req, res) => {
-    const { username, old_Password, password, configPassword } = req.body;
+    const { old_Password, password, configPassword } = req.body;
+    const { username } = req.user;
     User.findOne({ username: username }, (err, user) => {
       if (err || !user) {
         console.log("ERROR 1");

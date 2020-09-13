@@ -86,7 +86,11 @@ function Footer() {
               <p>
                 <i className="fas fa-home mr-3" />
                 <span className="text-secondary font-weight-bold">
-                  <a className="text-secondary font-weight-bold" href="https://www.google.com/maps/place/Ch%E1%BB%A3+Phong+%C4%90i%E1%BB%81n,+Phong+%C4%90i%E1%BB%81n,+C%E1%BA%A7n+Th%C6%A1,+Vi%E1%BB%87t+Nam/@9.9976846,105.6694481,18z/data=!4m5!3m4!1s0x31a08ec72ffa7f0d:0x770d8cd50222f8e4!8m2!3d9.99667!4d105.6712573?hl=vi-VN">
+                  <a
+                    className="text-secondary font-weight-bold"
+                    target="blank"
+                    href="https://www.google.com/maps/place/Ch%E1%BB%A3+Phong+%C4%90i%E1%BB%81n,+Phong+%C4%90i%E1%BB%81n,+C%E1%BA%A7n+Th%C6%A1,+Vi%E1%BB%87t+Nam/@9.9976846,105.6694481,18z/data=!4m5!3m4!1s0x31a08ec72ffa7f0d:0x770d8cd50222f8e4!8m2!3d9.99667!4d105.6712573?hl=vi-VN"
+                  >
                     Phong Điền, Cần Thơ
                   </a>
                 </span>
@@ -97,13 +101,25 @@ function Footer() {
                   className="text-secondary"
                   style={{ fontWeight: "bold", fontSize: "16.4px" }}
                 >
-                  <a className="text-secondary font-weight-bold" href="mailto:tranquocliemc6@gmail.com" subject="WTF">tranquocliemc6@gmail.com</a>
+                  <a
+                    className="text-secondary font-weight-bold"
+                    href="mailto:tranquocliemc6@gmail.com"
+                    subject="WTF"
+                  >
+                    tranquocliemc6@gmail.com
+                  </a>
                 </span>
               </p>
               <p>
                 <i className="fas fa-phone mr-3" />{" "}
                 <span className="text-secondary font-weight-bold">
-                  <a className="text-secondary font-weight-bold" href="tel:+84782872822"> + 84 782 872 822</a>
+                  <a
+                    className="text-secondary font-weight-bold"
+                    href="tel:+84782872822"
+                  >
+                    {" "}
+                    + 84 782 872 822
+                  </a>
                 </span>
               </p>
             </div>
