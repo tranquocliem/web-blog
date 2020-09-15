@@ -10,6 +10,8 @@ const __ISMSIE__ = navigator.userAgent.match(/Trident/i) ? true : false;
 
 const QuillClipboard = Quill.import("modules/clipboard");
 
+document.body.setAttribute("spellcheck", false);
+
 class Clipboard extends QuillClipboard {
   getMetaTagElements = (stringContent) => {
     const el = document.createElement("div");

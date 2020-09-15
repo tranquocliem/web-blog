@@ -6,6 +6,7 @@ import "moment/locale/vi";
 import RelatedBlog from "./RelatedBlog";
 import fix from "../img/fix.jpg";
 import LikeAndDisLike from "./LikeAndDisLike";
+import Comments from "./Comments";
 // import { Container } from './styles';
 
 function DetailBlog(props) {
@@ -48,7 +49,7 @@ function DetailBlog(props) {
   const dUpdate = moment(dateUpdate).format("L");
   const upd = moment(dateUpdate).fromNow();
   const cred = moment(date).fromNow();
-  //console.log(post);
+  console.log(post);
   //console.log(user);
 
   if (post.content && post.isDisplay) {
@@ -106,6 +107,7 @@ function DetailBlog(props) {
             return "";
           })}
         </div>
+        <Comments />
       </div>
     );
   } else if (post.content && !post.isDisplay) {
