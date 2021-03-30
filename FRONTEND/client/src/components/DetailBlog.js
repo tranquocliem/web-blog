@@ -52,7 +52,11 @@ function DetailBlog(props) {
   console.log(post);
   //console.log(user);
 
-  if (post.content && post.isDisplay) {
+  if (
+    (post.content && post.isDisplay) ||
+    (post.content && user.role === "admin") ||
+    (post.content && user.role === "spadmin")
+  ) {
     return (
       <div className="container-fluid my-2 p-0">
         <div className="jumbotron mt-2">

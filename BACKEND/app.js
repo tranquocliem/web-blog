@@ -47,14 +47,18 @@ app.use(bodyParser.json());
 //nguoi dung se gui json len sever
 //no la mot module rieng le
 app.use(express.json());
-// const db = require("./config/key").mongoURI;
+const db = require("./config/key").mongoURI;
 
-const db = "mongodb://localhost:27017/Do_An_Co_So_2";
+// const db = "mongodb://localhost:27017/Do_An_Co_So_2";
 
 //const db = require("./config/key").mongoURI;
 
 mongoose
-  .connect(db, { useNewUrlParser: true, useUnifiedTopology: true })
+  .connect(db, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+  })
   .then(() => console.log("MongoDB Connected...."))
   .catch((err) => console.log(err));
 
